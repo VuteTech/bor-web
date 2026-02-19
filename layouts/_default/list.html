@@ -1,0 +1,48 @@
+{{ define "main" }}
+
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        {{ with .Params.Subtitle }}
+        <h5 class="subtitle is-5 is-muted">{{ . }}</h5>
+        {{ end }}
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    {{ if .Content }}
+    <div class="content">
+      {{ .Content }}
+    </div>
+    {{ end }}
+
+    <div class="columns is-multiline">
+      {{ range .Pages }}
+      <div class="column is-12">
+        <a href="{{ .RelPermalink }}" class="list-item-card">
+          <div class="card">
+            <div class="card-content">
+              <h3 class="title is-4">{{ .Title }}</h3>
+              {{ with .Params.date }}
+              <p class="subtitle is-6 is-muted">{{ . | time.Format "January 2, 2006" }}</p>
+              {{ end }}
+              <p>{{ .Plain | truncate 200 }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+{{ if .Site.Params.footer }}
+{{ partial "footer.html" . }}
+{{ end }}
+
+{{ end }}

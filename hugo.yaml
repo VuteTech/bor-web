@@ -1,0 +1,119 @@
+baseURL: https://getbor.dev/
+languageCode: en-us
+title: Bor
+
+module:
+  imports:
+    - path: github.com/StefMa/hugo-fresh
+
+disableKinds:
+  - taxonomy
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+enableRobotsTXT: true
+
+params:
+  openGraph: true
+  description: Enterprise Linux Desktop Policy Management System
+  navbarlogo:
+    image: logos/bor.svg
+    link: /
+  font:
+    name: "Open Sans"
+    sizes: [400, 600]
+  hero:
+    title: Policy management for Linux desktops
+    subtitle: Define, distribute, and enforce desktop configuration policies across your fleet — in real time. Open source, secure by default, built for enterprise Linux.
+    buttontext: Get Started
+    buttonlink: /docs/getting-started/
+    image: illustrations/hero.svg
+  navbar:
+    - title: Docs
+      url: /docs/
+    - title: Blog
+      url: /blog/
+    - title: GitHub
+      url: https://github.com/VuteTech/bor
+  section1:
+    title: How it works
+    subtitle: A central server, lightweight agents, real-time streaming
+    tiles:
+      - title: Centralized management
+        icon: mouse-globe
+        text: Author and manage policies from a web console built with PatternFly. Organize nodes into groups and control access with RBAC.
+        url: /docs/server/
+        buttonText: Learn more
+      - title: Real-time delivery
+        icon: laptop-cloud
+        text: Policies stream to agents over gRPC the moment they change. Delta sync minimizes bandwidth; snapshot fallback guarantees consistency.
+        url: /docs/architecture/
+        buttonText: Learn more
+      - title: Secure by default
+        icon: plug-cloud
+        text: mTLS with an auto-generated internal CA. One-time token enrollment. No shared secrets, no polling, no plaintext.
+        url: /docs/agent/
+        buttonText: Learn more
+  section2:
+    title: Built for enterprise Linux
+    subtitle: Lightweight, native, and open source
+    features:
+      - title: Zero-touch enrollment
+        text: Generate a one-time token in the web UI, pass it to the agent on first run. The agent bootstraps its own certificate — no manual key distribution needed.
+        icon: laptop-globe
+      - title: Streaming policy updates
+        text: Agents maintain a persistent gRPC stream to the server. When a policy or binding changes, agents receive the update immediately. Reconnection with delta sync handles network interruptions gracefully.
+        icon: doc-sync
+      - title: Firefox policy enforcement
+        text: The agent currently enforces Firefox ESR policies by merging configuration and writing it atomically. Support for additional policy types (systemd, packages, network) is planned.
+        icon: mobile-feed
+  section4:
+    title: Project Status
+    subtitle: Bor is in active development and has not yet reached an official release. The core functionality is working and we are progressing toward a first stable release.
+    clients:
+      - name: Core features complete
+        quote: Policy CRUD with draft/released lifecycle, gRPC streaming with delta sync and snapshot fallback, mTLS certificate-based authentication, RBAC, and container deployment on UBI.
+        job: Completed
+        img: 1
+      - name: In progress
+        quote: Persistent compliance reporting with database storage, node status dashboard, and LDAP/AD integration for enterprise directory services.
+        job: Current work
+        img: 2
+      - name: Planned
+        quote: Additional policy types (systemd, packages, network), agent auto-update mechanism, policy templates library, multi-tenancy, and Prometheus metrics.
+        job: Roadmap
+        img: 3
+  footer:
+    logo: logo-white.svg
+    socialmediatitle: Follow Us
+    socialmedia:
+      - link: https://github.com/VuteTech/bor
+        icon: github
+    bulmalogo: false
+    quicklinks:
+      column1:
+        title: "Project"
+        links:
+          - text: Getting Started
+            link: /docs/getting-started/
+          - text: Architecture
+            link: /docs/architecture/
+          - text: Contributing
+            link: /docs/contributing/
+      column2:
+        title: "Documentation"
+        links:
+          - text: Server
+            link: /docs/server/
+          - text: Agent
+            link: /docs/agent/
+      column3:
+        title: "Community"
+        links:
+          - text: GitHub
+            link: https://github.com/VuteTech/bor
+          - text: Blog
+            link: /blog/

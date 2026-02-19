@@ -1,0 +1,11 @@
+<svg width="112" height="36" viewBox="0 0 112 36" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tree icon scaled down -->
+  <g transform="translate(2, 2) scale(0.145)">
+    <circle cx="110" cy="110" r="100" fill="none" stroke="#0F2F24" stroke-width="8"/>
+    <line x1="110" y1="60" x2="110" y2="150" stroke="#0F2F24" stroke-width="10" stroke-linecap="round"/>
+    <path d="M110 90 Q75 110 65 130" fill="none" stroke="#0F2F24" stroke-width="8" stroke-linecap="round"/>
+    <path d="M110 90 Q145 110 155 130" fill="none" stroke="#0F2F24" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <!-- "Bor" text -->
+  <text x="42" y="25" font-family="'Open Sans', sans-serif" font-size="22" font-weight="700" fill="#0F2F24">Bor</text>
+</svg>

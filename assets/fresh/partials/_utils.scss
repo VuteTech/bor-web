@@ -1,0 +1,150 @@
+/* ==========================================================================
+Bor custom utilities
+========================================================================== */
+
+/* Coming Soon badge */
+.coming-soon-badge {
+    display: inline-block;
+    margin-bottom: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    background: #fff3e0;
+    border: 1px solid #e5a50a;
+    border-radius: 6px;
+    color: #bf8c00;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    text-decoration: none;
+    transition: all 0.3s;
+
+    &:hover {
+        background: #ffecc2;
+        color: #8a6500;
+    }
+}
+
+/* Sponsored by banner */
+.sponsored-banner {
+    padding: 1.5rem 0;
+    background: $smoke-white;
+    border-top: 1px solid $fade-grey;
+    border-bottom: 1px solid $fade-grey;
+
+    .sponsored-text {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.85rem;
+        color: $muted-grey;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-right: 1rem;
+        vertical-align: middle;
+    }
+
+    .sponsored-logo {
+        height: 28px;
+        vertical-align: middle;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+/* List page cards */
+.list-item-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 0.5rem;
+
+    .card {
+        transition: box-shadow 0.3s, transform 0.15s;
+        border: 1px solid $fade-grey;
+        border-radius: 8px;
+        box-shadow: none;
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+    }
+
+    .title {
+        color: $primary;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .subtitle {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    p:last-child {
+        color: $blue-grey;
+    }
+}
+
+/* Section 4 (Project Status) — improve subtitle readability */
+.section.section-secondary {
+    .title-wrapper {
+        max-width: 700px;
+
+        .subtitle.light-text {
+            color: #d0e8d2 !important;
+            font-weight: 400;
+        }
+    }
+}
+
+/* Utility — keep theme defaults we need */
+.light-text {
+    color: $white !important;
+}
+
+.stuck {
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 2 !important;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+.mb-60 {
+    margin-bottom: 60px;
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.mt-60 {
+    margin-top: 60px;
+}
+
+/* Footer credit */
+.footer-credit {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+    font-size: 0.85rem;
+    color: $light-blue-grey;
+
+    a {
+        color: $light-blue-grey;
+        text-decoration: underline;
+        transition: color 0.3s;
+
+        &:hover {
+            color: $white;
+        }
+    }
+}
