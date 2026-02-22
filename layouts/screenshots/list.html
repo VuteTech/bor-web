@@ -1,0 +1,108 @@
+{{ define "main" }}
+
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        {{ with .Params.Subtitle }}
+        <h5 class="subtitle is-5 is-muted">{{ . }}</h5>
+        {{ end }}
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="columns is-multiline">
+
+      <div class="column is-12">
+        <h3 class="title is-4">Dashboard</h3>
+        <p class="mb-4">The dashboard provides a fleet overview with node status, OS distribution, policy counts, binding status, and coverage by group.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/dashboard.png" | relURL }}" alt="Bor Dashboard" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Policies</h3>
+        <p class="mb-4">Browse and manage desktop policies with search, filtering by type, status, and bindings.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policies-list.png" | relURL }}" alt="Policies List" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Create Policy</h3>
+        <p class="mb-4">Create new policies with a name, description, type, and initial state. Supported policy types include Firefox and Kconfig.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/create-policy.png" | relURL }}" alt="Create Policy Dialog" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Policy Details</h3>
+        <p class="mb-4">Fill in policy details including the name, description, and type before creating.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/create-policy-details.png" | relURL }}" alt="Policy Details" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Policy Configuration</h3>
+        <p class="mb-4">Configure granular policy settings organized by category — updates, privacy, network, security, homepage, extensions, and more.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-configuration.png" | relURL }}" alt="Policy Configuration" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Nodes</h3>
+        <p class="mb-4">Monitor connected desktop agents with status, OS, group membership, and detailed node information including FQDN, IP address, and desktop environment.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Node Groups</h3>
+        <p class="mb-4">Organize nodes into groups and generate one-time enrollment tokens for agent registration.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Token" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Policy Bindings</h3>
+        <p class="mb-4">Bind released policies to node groups. Nodes inherit policies through group membership.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Audit Logs</h3>
+        <p class="mb-4">Track all administrative actions with detailed audit logs including timestamps, user, action, resource type, and full request details.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/audit-logs.png" | relURL }}" alt="Audit Logs" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Desktop Notifications</h3>
+        <p class="mb-4">The Bor agent notifies users on the desktop when policies are updated, prompting them to restart affected applications.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent" style="border: 1px solid #ddd; border-radius: 4px;">
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{{ if .Site.Params.footer }}
+{{ partial "footer.html" . }}
+{{ end }}
+
+{{ end }}
