@@ -19,81 +19,137 @@
 
       <div class="column is-12">
         <h3 class="title is-4">Dashboard</h3>
-        <p class="mb-4">The dashboard provides a fleet overview with node status, OS distribution, policy counts, binding status, and coverage by group.</p>
+        <p class="mb-4">Fleet overview with node status indicators, OS distribution, policy counts, binding coverage by group, and certificate expiry tracking.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/dashboard.png" | relURL }}" alt="Bor Dashboard" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/dashboard.png" | relURL }}" alt="Bor Dashboard">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Policies</h3>
-        <p class="mb-4">Browse and manage desktop policies with search, filtering by type, status, and bindings.</p>
+        <p class="mb-4">Browse and manage desktop policies with search, filtering by type, status, and bindings. Each update creates a new immutable version.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policies-list.png" | relURL }}" alt="Policies List" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/policies-list.png" | relURL }}" alt="Policies List">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
-        <h3 class="title is-4">Create Policy</h3>
-        <p class="mb-4">Create new policies with a name, description, type, and initial state. Supported policy types include Firefox and Kconfig.</p>
+        <h3 class="title is-4">Creating a Policy</h3>
+        <p class="mb-4">Create a new policy by selecting its type and initial state. Policies start in draft and are only delivered to agents once explicitly released.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/create-policy.png" | relURL }}" alt="Create Policy Dialog" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/create-policy.png" | relURL }}" alt="Create Policy Dialog">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
-        <h3 class="title is-4">Policy Details</h3>
-        <p class="mb-4">Fill in policy details including the name, description, and type before creating.</p>
+        <h3 class="title is-4">Firefox Policy Configuration</h3>
+        <p class="mb-4">Configure granular Firefox ESR settings organised by category — updates, privacy, network, security, homepage, and extensions — with per-key lock support.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/create-policy-details.png" | relURL }}" alt="Policy Details" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/policy-configuration.png" | relURL }}" alt="Firefox Policy Configuration">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
-        <h3 class="title is-4">Policy Configuration</h3>
-        <p class="mb-4">Configure granular policy settings organized by category — updates, privacy, network, security, homepage, extensions, and more.</p>
+        <h3 class="title is-4">dconf / GNOME Policy</h3>
+        <p class="mb-4">Define dconf key-value entries that the agent writes to the managed GNOME desktop. Each entry can optionally be locked to prevent user override.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-configuration.png" | relURL }}" alt="Policy Configuration" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/policy-dconf.png" | relURL }}" alt="dconf GNOME Policy Configuration">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">KDE/KConfig — System Settings Restrictions</h3>
+        <p class="mb-4">Restrict access to individual KDE System Settings modules by category — window manager, appearance, screen lock, security, and more. Modules marked as restricted are hidden from users entirely.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-kconfig-restrictions.png" | relURL }}" alt="KDE KConfig System Settings Module Restrictions">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Polkit Policy</h3>
+        <p class="mb-4">Author Polkit rules through a structured form — define action IDs, groups, session requirements, and result (allow / deny / authenticate). Bor generates and deploys the JavaScript rule automatically.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-polkit.png" | relURL }}" alt="Polkit Policy Configuration">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Nodes</h3>
-        <p class="mb-4">Monitor connected desktop agents with status, OS, group membership, and detailed node information including FQDN, IP address, and desktop environment.</p>
+        <p class="mb-4">Monitor enrolled desktop agents with connectivity status, OS, desktop environment, group membership, and details such as FQDN, IP address, and agent version.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Node Groups</h3>
-        <p class="mb-4">Organize nodes into groups and generate one-time enrollment tokens for agent registration.</p>
+        <p class="mb-4">Organise nodes into logical groups. One-time enrollment tokens are generated per group and expire after five minutes.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Token" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Tokens">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Policy Bindings</h3>
-        <p class="mb-4">Bind released policies to node groups. Nodes inherit policies through group membership.</p>
+        <p class="mb-4">Assign policies to node groups. Nodes inherit all bindings from every group they belong to. A priority field controls which binding wins when multiple policies of the same type apply to the same node.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Creating a Policy Binding</h3>
+        <p class="mb-4">Bind a policy to a node group in one step — select the policy, the target group, set the binding state and priority, and confirm. Changes are streamed to affected agents immediately.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/create-policy-binding.png" | relURL }}" alt="Create Policy Binding Dialog">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Audit Logs</h3>
-        <p class="mb-4">Track all administrative actions with detailed audit logs including timestamps, user, action, resource type, and full request details.</p>
+        <p class="mb-4">Every administrative action is recorded with a timestamp, actor, source IP, resource type, and resource ID. Logs are searchable, filterable, and exportable as CSV or JSON.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/audit-logs.png" | relURL }}" alt="Audit Logs" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/audit-logs-detail.png" | relURL }}" alt="Audit Logs with Event Detail">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Desktop Notifications</h3>
-        <p class="mb-4">The Bor agent notifies users on the desktop when policies are updated, prompting them to restart affected applications.</p>
+        <p class="mb-4">The Bor agent notifies the user on the desktop when a policy is updated, prompting them to restart affected applications for the change to take effect.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent" style="border: 1px solid #ddd; border-radius: 4px;">
+          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">MFA Settings</h3>
+        <p class="mb-4">Enforce TOTP multi-factor authentication for all local user accounts. The TOTP algorithm is configurable — SHA256 for broad compatibility or SHA512 for a higher security margin.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/settings-mfa.png" | relURL }}" alt="MFA Settings">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Account Security</h3>
+        <p class="mb-4">Users can secure their account with a second factor: a TOTP authenticator app (FreeOTP, Google Authenticator, or any compatible app) or a hardware or software security key via WebAuthn/FIDO2 (YubiKey, Bitwarden, 1Password).</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/settings-account-security.png" | relURL }}" alt="Account Security — TOTP and WebAuthn setup">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Dark Theme</h3>
+        <p class="mb-4">The web console ships with a dark theme for comfortable use in low-light environments.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/theme-dark.png" | relURL }}" alt="Dark Theme">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">High Contrast Theme</h3>
+        <p class="mb-4">A high-contrast theme is available for improved accessibility and readability.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/theme-hicolor.png" | relURL }}" alt="High Contrast Theme">
         </figure>
       </div>
 
