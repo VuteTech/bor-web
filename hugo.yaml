@@ -66,14 +66,17 @@ params:
     subtitle: Lightweight, native, and open source
     features:
       - title: Zero-touch enrollment
-        text: Generate a one-time token in the web UI, pass it to the agent on first run. The agent bootstraps its own certificate — no manual key distribution needed.
+        text: "On domain-joined machines, agents enroll automatically using their Kerberos ticket — no tokens, no manual steps. For machines outside a domain, a short-lived one-time token generated from the web UI is used instead. Either way, mTLS certificates are exchanged automatically after the initial authentication and stored securely on the agent."
         icon: laptop-globe
-      - title: Streaming policy updates
-        text: Agents maintain a persistent gRPC stream to the server. When a policy or binding changes, agents receive the update immediately. Reconnection with delta sync handles network interruptions gracefully.
+      - title: Real-time policy delivery
+        text: Policies reach every enrolled node the moment they are published. Persistent gRPC streams and delta sync keep bandwidth minimal and guarantee consistency — even across thousands of nodes or through network interruptions.
         icon: doc-sync
-      - title: Firefox policy enforcement
-        text: The agent currently enforces Firefox ESR policies by merging configuration and writing it atomically. Support for additional policy types (systemd, packages, network) is planned.
-        icon: mobile-feed
+      - title: Compliance without complexity
+        text: Every policy change, authentication event, and enforcement action is recorded in a tamper-evident audit log. Built-in RBAC, LDAP/AD integration, and support for Kerberos and WebAuthn align access controls with your existing directory services — ready for compliance reviews out of the box.
+        icon: plug-cloud
+      - title: Simple to deploy and operate
+        text: A single server binary backed by PostgreSQL, and a single lightweight agent. No message queues, no sidecars, no external dependencies. Install from a native package, manage with systemd — from zero to your first enrolled node in minutes.
+        icon: mouse-globe
   section4:
     title: Project Status
     subtitle: "What's built, what's in progress, and what's next"
