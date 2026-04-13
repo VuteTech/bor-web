@@ -30,7 +30,7 @@ params:
     subtitle: Define, distribute, and enforce desktop configuration policies across your fleet — in real time. Open source, secure by default, built for enterprise Linux.
     buttontext: Get Started
     buttonlink: /docs/getting-started/
-    image: illustrations/hero.svg
+    image: bor-start.png
   navbar:
     - title: Docs
       url: /docs/
@@ -90,10 +90,6 @@ params:
         img: 3
   footer:
     logo: logo-white.svg
-    socialmediatitle: Follow Us
-    socialmedia:
-      - link: https://github.com/VuteTech/bor
-        icon: github
     bulmalogo: false
     quicklinks:
       column1:
@@ -112,6 +108,8 @@ params:
             link: /docs/server/
           - text: Agent
             link: /docs/agent/
+          - text: GitHub
+            link: https://github.com/VuteTech/bor/tree/master/docs
       column3:
         title: "Community"
         links:

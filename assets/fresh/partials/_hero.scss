@@ -1,0 +1,91 @@
+/* ==========================================================================
+Hero styles (base — preserved from theme)
+========================================================================== */
+
+.hero-body {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    .title, .subtitle {
+        font-family: 'Open Sans', sans-serif;
+    }
+    .title {
+        &.is-bold {
+            font-weight: 700;
+        }
+    }
+    .subtitle {
+        &.is-muted {
+            color: $muted-grey;
+        }
+    }
+}
+
+.hero-foot {
+    img.partner-logo {
+        height: 70px;
+    }
+}
+
+/* ==========================================================================
+App-screenshot hero variant
+========================================================================== */
+
+.hero-body--app {
+    padding-bottom: 0;
+
+    .hero-intro {
+        max-width: 720px;
+        margin: 0 auto 3rem;
+    }
+
+    .app-window-wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+    }
+}
+
+.app-window {
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    border: 1px solid darken($fade-grey, 6%);
+    border-bottom: none;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        0 24px 64px rgba(0, 0, 0, 0.14);
+
+    .app-window-bar {
+        background: #e4e4e4;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        border-bottom: 1px solid darken($fade-grey, 10%);
+    }
+
+    .app-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+
+        &--red    { background: #ff5f57; }
+        &--yellow { background: #ffbd2e; }
+        &--green  { background: #28c940; }
+    }
+
+    .app-window-label {
+        flex: 1;
+        text-align: center;
+        font-size: 0.75rem;
+        color: $muted-grey;
+        font-weight: 600;
+        font-family: 'Open Sans', sans-serif;
+        margin-right: 45px; // compensate for dots width so label is visually centered
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}

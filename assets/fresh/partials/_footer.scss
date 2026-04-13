@@ -33,12 +33,32 @@ footer.footer-dark {
                 color: $smoke-white;
             }
         }
-        .level-item .icon {
-            color: $accent;
-            transition: all 0.5s;
-            :hover {
-                color: $smoke-white;
-            }
-        }
+    }
+}
+
+.footer-sponsor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-decoration: none;
+    gap: 8px;
+
+    .footer-sponsor-logo {
+        height: 36px;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+    }
+
+    .footer-sponsor-name {
+        color: $light-blue-grey;
+        font-size: 1rem;
+        font-weight: 400;
+        font-family: 'Open Sans', sans-serif;
+        transition: color 0.3s;
+    }
+
+    &:hover {
+        .footer-sponsor-logo { opacity: 1; }
+        .footer-sponsor-name { color: $smoke-white; }
     }
 }

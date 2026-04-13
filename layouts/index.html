@@ -4,9 +4,7 @@
     {{ partial "hero.html" . }}
     {{ end }}
 
-    {{ partial "sponsored.html" . }}
-
-    {{ if .Site.Params.section1 }}
+{{ if .Site.Params.section1 }}
     {{ partial "section1.html" . }}
     {{ end }}
 

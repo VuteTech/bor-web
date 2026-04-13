@@ -4,31 +4,32 @@
 {{- $buttonText := index $hero "buttontext" }}
 {{- $buttonLink := index $hero "buttonlink" }}
 {{- $image      := index $hero "image" }}
-<div class="hero-body">
+<div class="hero-body hero-body--app">
   <div class="container">
-    <div class="columns is-vcentered">
-      <div class="column is-5 is-offset-1 landing-caption">
-        <h1 class="title is-1 is-bold is-spaced">
-          {{ $title }}
-        </h1>
-        <a href="#section4" class="coming-soon-badge">
-          Coming Soon! The project is still under active development.
+    <div class="hero-intro has-text-centered">
+      <h1 class="title is-1 is-bold is-spaced">
+        {{ $title }}
+      </h1>
+      {{ with $subtitle }}
+      <h2 class="subtitle is-5 is-muted">
+        {{ . }}
+      </h2>
+      {{ end }}
+      <p>
+        <a class="button cta rounded primary-btn raised" href="{{ $buttonLink }}">
+          {{ $buttonText }}
         </a>
-        {{ with $subtitle }}
-        <h2 class="subtitle is-5 is-muted">
-          {{ . }}
-        </h2>
-        {{ end }}
-        <p>
-          <a class="button cta rounded primary-btn raised" href="{{ $buttonLink }}">
-            {{ $buttonText }}
-          </a>
-        </p>
-      </div>
-      <div class="column is-5 is-offset-1">
-        <figure class="image is-4by3">
-          <img src="{{ printf "images/%s" $image | relURL }}" alt="Description">
-        </figure>
+      </p>
+    </div>
+    <div class="app-window-wrap">
+      <div class="app-window">
+        <div class="app-window-bar">
+          <span class="app-dot app-dot--red"></span>
+          <span class="app-dot app-dot--yellow"></span>
+          <span class="app-dot app-dot--green"></span>
+          <span class="app-window-label">Bor — Policy Management</span>
+        </div>
+        <img src="{{ printf "images/%s" $image | relURL }}" alt="Bor Policy Management dashboard">
       </div>
     </div>
   </div>

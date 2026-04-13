@@ -33,23 +33,12 @@
       <div class="column">
         <div class="footer-column">
           <div class="footer-header">
-            <h3>{{ $socialMediaTitle }}</h3>
-            <nav class="level is-mobile">
-              <div class="level-left">
-                {{- range $socialMedia }}
-                <a class="level-item" href="{{ .link }}">
-                  <span class="icon"><i class="fa fa-{{ .icon }}"></i></span>
-                </a>
-                {{- end }}
-              </div>
-            </nav>
-
-            {{- if $bulmaLogo }}
-            <a href="https://bulma.io" target="_blank">
-              <img src="{{ "images/logos/made-with-bulma.png" | relURL }}" alt="Made with Bulma" width="128" height="24">
-            </a>
-            {{- end }}
+            <h3>Sponsored by</h3>
           </div>
+          <a href="https://vute.tech" target="_blank" rel="noopener" class="footer-sponsor">
+            <img src="{{ "images/logos/vute.svg" | relURL }}" alt="Vute Tech" class="footer-sponsor-logo">
+            <span class="footer-sponsor-name">Vute Tech</span>
+          </a>
         </div>
       </div>
     </div>
