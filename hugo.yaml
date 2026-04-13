@@ -76,20 +76,40 @@ params:
         icon: mobile-feed
   section4:
     title: Project Status
-    subtitle: Bor is in active development and has not yet reached an official release. The core functionality is working and we are progressing toward a first stable release.
-    clients:
-      - name: Core features complete
-        quote: Policy CRUD with draft/released lifecycle, gRPC streaming with delta sync and snapshot fallback, mTLS certificate-based authentication, RBAC, and container deployment on UBI.
-        job: Completed
-        img: 1
-      - name: In progress
-        quote: Persistent compliance reporting with database storage, node status dashboard, and LDAP/AD integration for enterprise directory services.
-        job: Current work
-        img: 2
-      - name: Planned
-        quote: Additional policy types (systemd, packages, network), agent auto-update mechanism, policy templates library, multi-tenancy, and Prometheus metrics.
-        job: Roadmap
-        img: 3
+    subtitle: "What's built, what's in progress, and what's next"
+    columns:
+      - title: Done
+        color: done
+        items:
+          - Policy CRUD with draft / released / archived lifecycle
+          - gRPC streaming — delta sync and snapshot fallback
+          - Compliance reporting with per-item results
+          - Node status dashboard and fleet overview
+          - "Policies: Firefox, Chrome, KDE/KConfig, dconf, polkit"
+          - LDAP / AD with group-to-role mapping
+          - Kerberos (SPNEGO) — primary agent authentication, alternative to enrollment tokens
+          - WebAuthn / Passkey — web UI login
+          - PKCS#11 / HSM support for CA private keys
+          - Prometheus metrics endpoint
+          - Audit log with configurable retention
+          - RBAC — predefined roles, scope-aware
+          - "Packages: .deb .rpm .apk .pkg.tar.zst, multi-arch"
+          - Tamper protection — managed file modifications trigger audit log alerts
+          - mTLS connectivity between the server and the agents
+      - title: In Progress
+        color: progress
+        items:
+          - Multi-tenancy (RBAC scopes done, per-org data isolation pending)
+          - ACME / Let's Encrypt support for web UI TLS
+      - title: Planned
+        color: planned
+        items:
+          - systemd, package, and network policy types
+          - Flatpak and package management support
+          - Management of XDG Desktop portals
+          - FirewallD policy type
+          - Agent auto-update mechanism
+          - Policy templates library
   footer:
     logo: logo-white.svg
     bulmalogo: false

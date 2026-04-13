@@ -130,6 +130,95 @@ Bor custom utilities
 }
 
 /* ==========================================================================
+Kanban board (Project Status section)
+========================================================================== */
+
+$kanban-done:     #2E7D32;
+$kanban-progress: #E65100;
+$kanban-planned:  #1565C0;
+
+.kanban-section {
+    background: $section-grey;
+    padding-bottom: 4rem;
+
+    .title-wrapper {
+        margin-bottom: 2.5rem;
+    }
+}
+
+.kanban-board {
+    align-items: flex-start;
+}
+
+.kanban-col {
+    border-radius: 10px;
+    background: $white;
+    border: 1px solid $fade-grey;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &--done     { border-top: 3px solid $kanban-done; }
+    &--progress { border-top: 3px solid $kanban-progress; }
+    &--planned  { border-top: 3px solid $kanban-planned; }
+}
+
+.kanban-col-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid $fade-grey;
+    background: $smoke-white;
+}
+
+.kanban-col-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $blue-grey;
+
+    .kanban-col--done &     { color: $kanban-done; }
+    .kanban-col--progress & { color: $kanban-progress; }
+    .kanban-col--planned &  { color: $kanban-planned; }
+}
+
+.kanban-col-count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $white;
+    background: $title-grey;
+    border-radius: 999px;
+    padding: 1px 7px;
+
+    .kanban-col--done &     { background: $kanban-done; }
+    .kanban-col--progress & { background: $kanban-progress; }
+    .kanban-col--planned &  { background: $kanban-planned; }
+}
+
+.kanban-col-body {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kanban-card {
+    background: $white;
+    border: 1px solid $fade-grey;
+    border-radius: 6px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    color: $blue-grey;
+    line-height: 1.4;
+    transition: box-shadow 0.15s;
+
+    &:hover {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* ==========================================================================
 Download page
 ========================================================================== */
 

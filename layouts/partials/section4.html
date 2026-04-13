@@ -1,0 +1,28 @@
+{{- $s := .Site.Params.section4 }}
+{{- if $s }}
+<section class="section kanban-section" id="section4">
+  <div class="container">
+    <div class="title-wrapper has-text-centered">
+      <h2 class="title is-2">{{ $s.title }}</h2>
+      <p class="subtitle is-5">{{ $s.subtitle }}</p>
+    </div>
+    <div class="columns is-desktop kanban-board">
+      {{- range $s.columns }}
+      <div class="column">
+        <div class="kanban-col kanban-col--{{ .color }}">
+          <div class="kanban-col-header">
+            <span class="kanban-col-title">{{ .title }}</span>
+            <span class="kanban-col-count">{{ len .items }}</span>
+          </div>
+          <div class="kanban-col-body">
+            {{- range .items }}
+            <div class="kanban-card">{{ . }}</div>
+            {{- end }}
+          </div>
+        </div>
+      </div>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}
