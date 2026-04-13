@@ -1,0 +1,73 @@
+{{ define "main" }}
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+{{/* Releases data — sourced from data/releases.json, regenerated in CI */}}
+
+<section class="dl-hero">
+  <div class="container has-text-centered">
+    <h1 class="title is-2 has-text-white">Download Bor</h1>
+    <p class="subtitle is-5 has-text-white-bis">
+      Packages for major Linux distributions — x86_64, aarch64, and ppc64le.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+
+        <div class="box dl-widget">
+
+          <!-- Step 1: Release -->
+          <div class="field">
+            <label class="label dl-label">
+              <span class="dl-badge">1</span>Release
+            </label>
+            <div class="control">
+              <div class="select is-medium">
+                <select id="dl-release">
+                  <option value="">Select a version…</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Component (revealed after release selected) -->
+          <div id="dl-step-component" class="dl-step" style="display:none">
+            <label class="label dl-label">
+              <span class="dl-badge">2</span>Component
+            </label>
+            <div class="tabs is-toggle">
+              <ul id="dl-component-tabs">
+                <li class="is-active"><a data-value="server">Server</a></li>
+                <li><a data-value="agent">Agent</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Step 3: Packages (revealed after component selected) -->
+          <div id="dl-step-packages" class="dl-step" style="display:none">
+            <label class="label dl-label">
+              <span class="dl-badge">3</span>Package
+            </label>
+            <div class="columns is-multiline" id="dl-grid"></div>
+          </div>
+
+        </div>
+
+        <div class="content">
+          {{ .Content }}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ partial "footer.html" . }}
+
+<script>var BOR_RELEASES={{ readFile "data/releases.json" | safeJS }};</script>
+<script src="{{ "js/download.js" | relURL }}" defer></script>
+{{ end }}

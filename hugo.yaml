@@ -29,9 +29,11 @@ params:
     title: Policy management for Linux desktops
     subtitle: Define, distribute, and enforce desktop configuration policies across your fleet — in real time. Open source, secure by default, built for enterprise Linux.
     buttontext: Get Started
-    buttonlink: /docs/getting-started/
+    buttonlink: /download/
     image: bor-start.png
   navbar:
+    - title: Download
+      url: /download/
     - title: Docs
       url: /docs/
     - title: Screenshots
@@ -95,8 +97,8 @@ params:
       column1:
         title: "Project"
         links:
-          - text: Getting Started
-            link: /docs/getting-started/
+          - text: Download
+            link: /download/
           - text: Architecture
             link: /docs/architecture/
           - text: Contributing
