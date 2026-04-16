@@ -40,8 +40,7 @@ params:
       url: /screenshots/
     - title: Blog
       url: /blog/
-    - title: GitHub
-      url: https://github.com/VuteTech/bor
+  githubFollow: https://github.com/VuteTech/bor
   section1:
     title: How it works
     subtitle: A central server, lightweight agents, real-time streaming
@@ -140,5 +139,10 @@ params:
         links:
           - text: GitHub
             link: https://github.com/VuteTech/bor
+            icon: github
+          - text: YouTube
+            link: https://www.youtube.com/watch?v=c7wH5c9QzCk
+            icon: youtube-play
           - text: Blog
             link: /blog/
+            icon: rss

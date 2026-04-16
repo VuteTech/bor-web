@@ -22,6 +22,7 @@
               {{- range .links }}
               <li>
                 <a href="{{ .link }}">
+                  {{- if .icon }}<span class="icon"><i class="fa fa-{{ .icon }}"></i></span> {{ end -}}
                   {{ .text }}
                 </a>
               </li>
