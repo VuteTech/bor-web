@@ -1,6 +1,7 @@
 ---
 title: "Introducing Bor"
 author: "Blagovest Petrov"
+author_url: "https://vute.tech"
 date: 2025-06-01
 tags: ["announcement"]
 ---

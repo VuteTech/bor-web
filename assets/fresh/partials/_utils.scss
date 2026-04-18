@@ -52,6 +52,35 @@ Bor custom utilities
     }
 }
 
+/* Blog post byline */
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: $muted-grey;
+
+    .post-author {
+        font-weight: 600;
+
+        a {
+            color: $primary;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .post-date::before {
+        content: '·';
+        margin-right: 1rem;
+    }
+}
+
 /* List page cards */
 .list-item-card {
     display: block;

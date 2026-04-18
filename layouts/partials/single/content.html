@@ -1,0 +1,32 @@
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        {{ with .Params.Subtitle }}
+        <h5 class="subtitle is-5 is-muted">{{ . }}</h5>
+        {{ end }}
+        {{ if or .Params.author (not .Date.IsZero) }}
+        <div class="post-meta">
+          {{ with .Params.author }}
+          <span class="post-author">
+            {{ . }}
+            {{ with $.Params.author_url }}
+            <a href="{{ . }}" target="_blank" rel="noopener">@{{ . | strings.TrimPrefix "https://" | strings.TrimPrefix "http://" | strings.TrimSuffix "/" }}</a>
+            {{ end }}
+          </span>
+          {{ end }}
+          {{ if not .Date.IsZero }}
+          <span class="post-date">{{ .Date | time.Format "January 2, 2006" }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
