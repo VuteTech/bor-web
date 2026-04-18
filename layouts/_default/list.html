@@ -31,7 +31,7 @@
               {{ with .Params.date }}
               <p class="subtitle is-6 is-muted">{{ . | time.Format "January 2, 2006" }}</p>
               {{ end }}
-              <p>{{ .Plain | truncate 200 }}</p>
+              <p>{{ .Plain | truncate 200 | safeHTML }}</p>
             </div>
           </div>
         </a>
