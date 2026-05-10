@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bor — Enterprise Linux Desktop Policy Management</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/github.css">
+
+  <style>
+    /* ── Brand colours from bg1.svg ── */
+    :root {
+      --g-dark:   #0f2f24;   /* very dark green — near-black */
+      --g-forest: #1b4332;   /* main brand green */
+      --g-mid:    #2d6a4f;   /* medium green */
+      --g-soft:   #52b788;   /* light-medium green */
+      --g-pale:   #d8f3dc;   /* pale mint */
+      --g-white:  #f9f9f9;   /* background white */
+      --g-text:   #12261d;   /* body text */
+    }
+
+    /* make the page background match the image bg */
+    .reveal-viewport { background: var(--g-white); }
+    .reveal .slide-background { background: var(--g-white); }
+
+    /* ── Global text ── */
+    .reveal { font-size: 27px; color: var(--g-text); }
+    .reveal .slides section { text-align: left; padding: 0 2.4em; box-sizing: border-box; }
+
+    /* ── Headings ── */
+    .reveal h1, .reveal h2, .reveal h3 { font-weight: 800; color: var(--g-forest); text-transform: none; }
+    .reveal h1 { font-size: 2.6em; letter-spacing: -.01em; }
+    .reveal h2 {
+      font-size: 1.5em;
+      border-bottom: 3px solid var(--g-forest);
+      padding-bottom: .18em;
+      margin-bottom: .5em;
+    }
+    .reveal h3 { font-size: 1.05em; color: var(--g-mid); margin: .5em 0 .2em; }
+
+    /* ── Lists ── */
+    .reveal ul { list-style: none; padding: 0; margin: 0; }
+    .reveal ul li {
+      padding: .2em 0 .2em 1.3em;
+      position: relative;
+      font-size: .95em;
+      line-height: 1.45;
+      color: var(--g-text);
+    }
+    .reveal ul li::before {
+      content: "▸";
+      position: absolute; left: 0; top: .24em;
+      color: var(--g-forest); font-size: .8em;
+    }
+    .reveal ul ul li::before { content: "◦"; color: var(--g-soft); }
+
+    /* ── Code ── */
+    .reveal pre {
+      width: 100%;
+      box-shadow: 0 0 0 2px rgba(27,67,50,.25);
+      border-radius: 5px;
+      margin: .4em 0;
+    }
+    .reveal pre code { max-height: 220px; font-size: .78em; }
+    .reveal p code, .reveal li code {
+      background: var(--g-pale);
+      color: var(--g-dark);
+      border-radius: 3px;
+      padding: .04em .32em;
+      font-size: .88em;
+    }
+
+    /* ── Table ── */
+    .reveal table { font-size: .82em; width: 100%; border-collapse: collapse; }
+    .reveal table th { color: var(--g-white); background: var(--g-forest); padding: .3em .5em; }
+    .reveal table td { padding: .28em .5em; border-bottom: 1px solid rgba(27,67,50,.15); }
+    .reveal table tr:nth-child(even) td { background: var(--g-pale); }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-left: 4px solid var(--g-forest);
+      padding: .45em .85em;
+      background: var(--g-pale);
+      border-radius: 0 5px 5px 0;
+      font-size: .9em;
+      margin: .4em 0;
+      color: var(--g-dark);
+    }
+    .callout.mint  { border-color: var(--g-soft); background: rgba(82,183,136,.1); }
+    .callout.white { background: rgba(255,255,255,.82); border-color: var(--g-forest); }
+
+    /* ── Two-column layout ── */
+    .cols { display: flex; gap: 1.6em; align-items: flex-start; }
+    .col  { flex: 1; }
+    .col.narrow { flex: 0 0 36%; }
+
+    /* ── ASCII diagram ── */
+    .diagram {
+      font-family: 'Courier New', monospace;
+      font-size: .62em;
+      line-height: 1.55;
+      color: var(--g-dark);
+      background: rgba(27,67,50,.06);
+      border: 1px solid rgba(27,67,50,.2);
+      border-radius: 5px;
+      padding: .7em 1em;
+      white-space: pre;
+      overflow: hidden;
+    }
+    .diagram .hl  { color: var(--g-forest); font-weight: bold; }
+    .diagram .hl2 { color: var(--g-mid); }
+    .diagram .hl3 { color: var(--g-soft); font-weight: bold; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: .08em .52em;
+      border-radius: 4px;
+      font-size: .68em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-right: .25em;
+      vertical-align: middle;
+    }
+    .b-forest { background: var(--g-forest); color: #fff; }
+    .b-soft   { background: var(--g-soft);   color: #fff; }
+    .b-pale   { background: var(--g-pale);   color: var(--g-dark); border: 1px solid var(--g-soft); }
+
+    /* ── Roadmap done/planned ── */
+    .reveal ul li.done   { color: var(--g-forest); }
+    .reveal ul li.plan   { color: var(--g-mid);    }
+    .reveal ul li.done::before  { content: "✓"; color: var(--g-soft);   font-weight: bold; }
+    .reveal ul li.plan::before  { content: "○"; color: var(--g-mid);    }
+
+    /* ══════════════════════════
+       TITLE SLIDE
+    ══════════════════════════ */
+    .slide-title { text-align: center !important; padding: 0 !important; }
+    .slide-title h1 {
+      font-size: 3.4em;
+      color: var(--g-forest);
+      margin: 0 0 .15em;
+      letter-spacing: -.02em;
+    }
+    .slide-title .subtitle {
+      font-size: 1.15em;
+      color: var(--g-mid);
+      margin-bottom: 1.4em;
+    }
+    .slide-title .author {
+      font-size: .78em;
+      color: var(--g-dark);
+      opacity: .75;
+    }
+    .slide-title .author a { color: var(--g-mid); }
+
+    /* ══════════════════════════
+       CTA / GET INVOLVED SLIDE
+    ══════════════════════════ */
+    .slide-cta { text-align: center !important; padding: 0 !important; }
+    .slide-cta h2 { border: none !important; font-size: 1.6em; }
+    .cta-link {
+      display: block;
+      font-size: .95em;
+      color: var(--g-forest);
+      margin: .32em 0;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cta-boxes { display: flex; gap: 1.2em; justify-content: center; margin-top: 1em; flex-wrap: wrap; }
+    .cta-box {
+      background: var(--g-pale);
+      border: 2px solid var(--g-forest);
+      border-radius: 8px;
+      padding: .7em 1.1em;
+      width: 210px;
+      font-size: .82em;
+      color: var(--g-dark);
+      text-align: left;
+    }
+    .cta-box strong { color: var(--g-forest); display: block; margin-bottom: .3em; }
+
+    /* ── Avatar ── */
+    .avatar-row { display: flex; align-items: center; gap: 1.2em; margin-bottom: .8em; }
+    .avatar-circle {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--g-forest);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2em; flex-shrink: 0; color: #fff;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════════════════════════════
+     1 · TITLE
+════════════════════════════════ -->
+<section
+  class="slide-title"
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="1">
+
+  <!-- push content into the white area (lower-center), away from logo & tagline -->
+  <div style="padding: 3.5em 3em 4.5em;">
+    <h1>Bor</h1>
+    <p class="subtitle">Enterprise Linux Desktop Policy Management</p>
+    <p style="font-size:.82em; color:var(--g-forest); font-weight:600; margin-bottom:1.8em;">
+      Open-source &nbsp;·&nbsp; Self-hosted &nbsp;·&nbsp; Linux-first
+    </p>
+    <p style="font-size:.72em; color:var(--g-mid); border-top: 1px solid rgba(27,67,50,.2); padding-top:.8em;">
+      <a href="https://tuxcon.mobi/" style="color:var(--g-forest); font-weight:700;">TuxCon 2026</a>
+      &nbsp;·&nbsp; 16–17 May, Plovdiv, Bulgaria
+    </p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     2 · WHO AM I
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Who am I?</h2>
+  <div class="avatar-row">
+    <div class="avatar-circle">👤</div>
+    <div>
+      <p style="margin:0; font-size:1.05em; font-weight:700; color:var(--g-forest)">Blagovest Petrov</p>
+      <p style="margin:.15em 0 0; color:var(--g-mid); font-size:.85em;">DevOps &nbsp;/&nbsp; Platform Engineering</p>
+    </div>
+  </div>
+  <ul>
+    <li>Active open source community user</li>
+    <li>Currently working in an enterprise company</li>
+  </ul>
+  <div class="callout mint" style="margin-top:1em;">
+    📧 blagovest@petrovs.info &nbsp;·&nbsp;
+    🌐 <a href="https://petrovs.info" style="color:var(--g-forest)">petrovs.info</a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     3 · WHAT IS BOR?
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>What is Bor?</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>Core capabilities</h3>
+      <ul>
+        <li class="fragment">Policy management &amp; distribution</li>
+        <li class="fragment">Token-based agent enrollment (or Kerberos)</li>
+        <li class="fragment">Fleet visibility — node groups &amp; compliance</li>
+        <li class="fragment">Real-time updates via gRPC streaming</li>
+        <li class="fragment">Tamper detection in real time — managed files are watched continuously and restored instantly if modified outside Bor</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     4 · THE PROBLEM
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>The Problem</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>Linux management is fragmented</h3>
+      <ul>
+        <li class="fragment">Active Directory–centric tooling assumes Windows; Linux is an afterthought</li>
+        <li class="fragment">MDM &amp; identity solutions are <strong>expensive</strong> or <strong>cloud-only</strong></li>
+        <li class="fragment">IaC tools (Ansible, Puppet) are powerful but not built for continuous desktop enforcement</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     5 · WHAT BOR IS NOT
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>What Bor is NOT</h2>
+  <ul>
+    <li class="fragment">A <strong>domain controller</strong> — it does not replace FreeIPA, Samba/AD, or LDAP</li>
+    <li class="fragment">An <strong>IaC tool</strong> — it is not Ansible, Puppet, or Salt; those handle provisioning, Bor handles continuous enforcement</li>
+    <li class="fragment">An <strong>orchestrator</strong> — it is not a provisioning and lifecycle tool like Foreman</li>
+  </ul>
+  <div class="callout mint fragment" style="margin-top:1.2em;">
+    Bor fits <em>alongside</em> your existing toolchain as the policy enforcement plane on each endpoint.
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     6 · KEY FEATURES
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Key Features</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li><span class="badge b-forest">Linux-first</span> designed for Linux</li>
+        <li><span class="badge b-soft">Self-hosted</span> your data never leaves your infra</li>
+        <li><span class="badge b-pale">Open Source</span> LGPLv3 — inspect, fork, contribute</li>
+        <li>Integrates with <strong>FreeIPA</strong>, <strong>Active Directory</strong>, LDAP</li>
+        <li>Modern stack: <strong>Go</strong> + <strong>gRPC</strong> + <strong>PatternFly React</strong></li>
+      </ul>
+    </div>
+    <div class="col">
+      <ul>
+        <li>Lightweight agent — a single static binary</li>
+        <li>Privacy &amp; data sovereignty by default</li>
+        <li>Native packages: deb, rpm, apk, Arch Linux</li>
+        <li>Audit logging — all server-side events (policy changes, enrollments, user actions) and agent tamper alerts are recorded with user, IP, and timestamp</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     7 · SECURITY FIRST
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Security First</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>Crypto &amp; PKI</h3>
+      <table style="font-size:.82em;">
+        <tr><th>Role</th><th>Algorithm</th><th>Lifetime</th></tr>
+        <tr><td>Internal CA</td><td>ECDSA P-384</td><td>10 yr</td></tr>
+        <tr><td>Server TLS cert</td><td>ECDSA P-256</td><td>365 d</td></tr>
+        <tr><td>Agent client cert</td><td>ECDSA P-256</td><td>90 d (auto-renewed)</td></tr>
+      </table>
+      <ul style="margin-top:.5em;">
+        <li>TLS 1.3 on agent port, mTLS mandatory</li>
+        <li>CA auto-generated on first boot</li>
+        <li>Optional PKCS#11 HSM for CA private key</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <h3>Standards</h3>
+      <ul>
+        <li>FIPS 140-3 validated crypto<br><small style="color:var(--g-mid);">(<code>GOFIPS140=v1.0.0</code>, CAVP A6650)</small></li>
+        <li>BSI TR-02102-1 (2024)</li>
+        <li>NIS2 / eIDAS ready</li>
+      </ul>
+      <h3>Access control</h3>
+      <ul>
+        <li>RBAC — granular per-resource permissions</li>
+        <li>LDAP / AD authentication</li>
+        <li>TOTP MFA + WebAuthn / FIDO2</li>
+        <li>Full audit log</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     8 · ARCHITECTURE
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Architecture</h2>
+  <div class="diagram">
+<span class="hl">┌─────────────────────┐</span>  gRPC stream / mTLS  <span class="hl">┌──────────────────────┐</span>
+<span class="hl">│    Bor Agent        │</span> ◄──── port 8444 ────▶ <span class="hl">│     Bor Server       │</span>
+<span class="hl">│  (Go daemon, root)  │</span>                        <span class="hl">│  Go + PatternFly UI  │</span>
+<span class="hl">└─────────────────────┘</span>  gRPC enroll / TLS   <span class="hl">└──────────┬───────────┘</span>
+  • One-time token enrollment ◄── port 8443 ──►              │ PostgreSQL
+  • mTLS client certificate auth                               ▼
+  • Applies Firefox / Chrome / KDE Kiosk     <span class="hl2">┌──────────────────────────────┐</span>
+  • Reports compliance + desktop notifs      <span class="hl2">│  policies · nodes · users    │</span>
+                                             <span class="hl2">│  bindings · RBAC · audit log │</span>
+                                             <span class="hl2">└──────────────────────────────┘</span>
+  </div>
+  <table style="margin-top:.65em;">
+    <tr><th>Default Port</th><th>Purpose</th><th>TLS</th><th>Client cert</th></tr>
+    <tr><td><code>8443</code></td><td>Admin UI (REST) + enrollment gRPC</td><td>TLS 1.3+</td><td>Optional</td></tr>
+    <tr><td><code>8444</code></td><td>Agent policy stream + cert renewal</td><td>TLS 1.3</td><td>Mandatory, mTLS</td></tr>
+  </table>
+</section>
+
+<!-- ════════════════════════════════
+     · ENROLLMENT FLOW
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Enrollment Flow</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="diagram" style="font-size:.64em;">
+<span class="hl">Admin</span>                      <span class="hl2">Server</span>
+  │                             │
+  │  1. Generate token in UI ──►│  (5-min TTL, single-use)
+  │                             │
+<span class="hl3">Agent</span>                      <span class="hl2">Server</span>
+  │                             │
+  │  2. bor-agent --token T     │
+  │     Generate ECDSA P-256    │
+  │     key pair + CSR          │
+  │                             │
+  │  3. Enroll RPC (TLS only)   │
+  │     token + CSR ───────────►│  4. Validate token
+  │                             │  5. Sign CSR with CA
+  │                             │  6. Create Node record
+  │                             │
+  │◄── signed cert + CA cert ───│
+  │                             │
+  │  7. Persist to /var/lib/bor │
+  │  8. systemctl enable ───────│  mTLS from now on
+      </div>
+    </div>
+    <div class="col narrow" style="font-size:.88em;">
+      <div class="callout mint">
+        Agent generates its own key — the private key <strong>never leaves the machine</strong>
+      </div>
+      <div class="callout" style="margin-top:.6em;">
+        Token is tied to a <strong>Node Group</strong> — policies start flowing immediately
+      </div>
+      <div class="callout mint" style="margin-top:.6em;">
+        Certs auto-renew every <strong>90 days</strong> — zero operator action needed
+      </div>
+      <div class="callout" style="margin-top:.6em;">
+        <strong>Kerberos enrollment:</strong> on domain-joined machines, the one-time token is replaced by a Kerberos ticket — the agent authenticates automatically using the machine's existing domain credentials, requiring no manual token generation
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     · SUPPORTED POLICY TYPES
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Supported Policy Types</h2>
+  <ul>
+    <li>Firefox ESR</li>
+    <li>Chromium / Google Chrome</li>
+    <li>KDE KConfig (Kiosk framework)</li>
+    <li>GNOME dconf</li>
+    <li>Polkit</li>
+    <li>Support of Flatpak apps</li>
+  </ul>
+</section>
+
+<!-- ════════════════════════════════
+     8 · PLANNED POLICY TYPES
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Planned Policy Types</h2>
+  <ul>
+    <li class="plan">Package management — dnf, zypper, apt, and more</li>
+    <li class="plan">FirewallD</li>
+    <li class="plan">Flatpak package management</li>
+    <li class="plan">XDG Desktop Portals</li>
+    <li class="plan">systemd services</li>
+    <li class="plan">systemd timers</li>
+  </ul>
+  <div class="callout mint" style="margin-top:1.2em;">
+    More to come — pull requests and ideas are always welcome!
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     8 · POLICY STREAMING
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Real-Time Policy Delivery</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="diagram" style="font-size:.64em;">
+<span class="hl3">Agent</span>                          <span class="hl2">Server</span>
+  │                                 │
+  │  Connect with mTLS ────────────►│
+  │  SubscribePolicyUpdates         │
+  │  (last_known_revision) ────────►│
+  │                                 │
+  │◄──── SNAPSHOT (full sync) ──────│  all current policies
+  │                                 │
+  │  Apply policies locally         │
+  │  ReportCompliance ─────────────►│
+  │                                 │
+  │    ... stream stays open ...    │
+  │                                 │
+  │  Admin changes policy binding   │
+  │◄──── UPDATED / CREATED /        │
+  │      DELETED events ────────────│
+  │                                 │
+  │  Apply delta — done instantly!  │
+      </div>
+    </div>
+    <div class="col narrow">
+      <h3>PolicyHub</h3>
+      <ul>
+        <li>In-memory pub/sub ring buffer</li>
+        <li>1 000-event window</li>
+        <li>Monotonic revision counter</li>
+      </ul>
+      <h3>Delta sync</h3>
+      <ul>
+        <li>Reconnecting agents get only what changed</li>
+        <li>Full snapshot if revision too old</li>
+        <li>Reconnect with exponential backoff (max 60 s)</li>
+      </ul>
+      <h3>Policy conflicts</h3>
+      <ul>
+        <li>Each binding carries a <strong>priority</strong> value — when two policies set the same key, the higher-priority one wins</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     · ROADMAP
+════════════════════════════════ -->
+<section
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.12">
+
+  <h2>Roadmap <em style="font-size:.6em; color:var(--g-mid); font-weight:400;">(Help is appreciated!)</em></h2>
+  <ul>
+<li class="plan">Agent auto-update mechanism</li>
+    <li class="plan">Multi-tenancy</li>
+    <li class="plan">Policy import/export format</li>
+    <li class="plan">Sync policies with Git</li>
+    <li class="plan">ACME protocol support (Let's Encrypt)</li>
+    <li class="plan">Documentation, documentation, documentation…</li>
+    <li class="plan">E2E testing + use cases</li>
+    <li class="plan">I18n</li>
+  </ul>
+</section>
+
+<!-- ════════════════════════════════
+     14 · GET INVOLVED
+════════════════════════════════ -->
+<section
+  class="slide-cta"
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="1">
+
+  <div style="padding: 2.8em 3em 4.5em;">
+    <h2>Get Involved</h2>
+    <a class="cta-link" href="https://getbor.dev">🌐 getbor.dev</a>
+    <a class="cta-link" href="https://github.com/VuteTech/Bor">🐙 github.com/VuteTech/Bor</a>
+    <a class="cta-link" href="mailto:blagovest@petrovs.info">✉️ blagovest@petrovs.info</a>
+    <a class="cta-link" href="https://getbor.dev/publications/tuxcon2026">🗂️ getbor.dev/publications/tuxcon2026</a>
+
+    <div class="cta-boxes">
+      <div class="cta-box">
+        <strong>Contribute</strong>
+        Issues, PRs, feedback — all welcome.<br>
+        See <code>docs/CONTRIBUTING.md</code>
+      </div>
+<div class="cta-box">
+        <strong>Spread the word</strong>
+        Star ⭐ the repo and share with your Linux admin friends.
+      </div>
+    </div>
+
+    <p style="margin-top:1.2em; font-size:.7em; color:var(--g-mid);">
+      Licensed under LGPLv3 &nbsp;·&nbsp; Copyright © 2026 Vute Tech LTD &amp; contributors
+    </p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     · DEMO
+════════════════════════════════ -->
+<section
+  class="slide-title"
+  data-background-image="bor_presentation_backgrounds/bg1.png"
+  data-background-size="100% 100%"
+  data-background-opacity="0.18">
+
+  <div style="padding: 3em 3em 4.5em;">
+    <div style="font-size: 5em; margin-bottom: .2em;">🖥️</div>
+    <h1 style="font-size:2.8em;">Time for a Demo</h1>
+  </div>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    // 16:9 to match the 1920×1080 background image exactly
+    width:  1280,
+    height: 720,
+    margin: 0.06,
+
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    plugins: [ RevealHighlight, RevealNotes, RevealZoom ],
+  });
+</script>
+</body>
+</html>
