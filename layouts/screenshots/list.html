@@ -153,6 +153,38 @@
         </figure>
       </div>
 
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Package Policy — Repositories</h3>
+        <p class="mb-4">Add APT, DNF/YUM, or Zypper repositories to a Package policy. Fields adapt to the selected repository type; GPG key upload is supported for all types.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-package-repository.png" | relURL }}" alt="Package Policy — Repositories tab">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Package Policy — Packages</h3>
+        <p class="mb-4">Manage individual packages with desired state (present, absent, or latest), optional version pinning, and an optional flag for non-critical packages.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-package.png" | relURL }}" alt="Package Policy — Packages tab">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Ubuntu PPA Import</h3>
+        <p class="mb-4">Enter a <code>ppa:owner/name</code> address and select an Ubuntu codename. The server fetches the repository URI and signing key from Launchpad automatically.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-package-ppa.png" | relURL }}" alt="Add Ubuntu PPA dialog">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">openSUSE 1-Click (.ymp) Import</h3>
+        <p class="mb-4">Upload a <code>.ymp</code> file and the server parses it, populating repositories and packages in one step. The banner confirms how many repositories and packages were imported.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-package-ymp.png" | relURL }}" alt="openSUSE .ymp import result">
+        </figure>
+      </div>
+
     </div>
   </div>
 </section>
