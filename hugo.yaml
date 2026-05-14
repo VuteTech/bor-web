@@ -19,6 +19,8 @@ enableRobotsTXT: true
 params:
   openGraph: true
   description: Enterprise Linux Desktop Policy Management System
+  images:
+    - /images/bor-start.png
   navbarlogo:
     image: logos/bor.svg
     link: /
