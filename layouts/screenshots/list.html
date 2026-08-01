@@ -23,7 +23,7 @@
         <h3 class="title is-4">Two-Step Login</h3>
         <p class="mb-4">The redesigned login asks for the username first, then the password or MFA factor. The password step includes a reveal toggle and a live Caps Lock warning.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/login-password-reveal.png" | relURL }}" alt="Two-step login — password step with reveal toggle and Caps Lock warning">
+          {{ partial "screenshot.html" (dict "file" "login-password-reveal.png" "alt" "Two-step login — password step with reveal toggle and Caps Lock warning") }}
         </figure>
       </div>
 
@@ -31,7 +31,15 @@
         <h3 class="title is-4">Dashboard</h3>
         <p class="mb-4">Fleet overview with drill-down stat tiles — node status, OS distribution, agent versions, and policy counts link straight to pre-filtered list views. The sidebar is grouped into Fleet, Policy, and System.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/dashboard.png" | relURL }}" alt="Bor Dashboard">
+          {{ partial "screenshot.html" (dict "file" "dashboard.png" "alt" "Bor Dashboard") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Dark Mode</h3>
+        <p class="mb-4">The entire UI is theme-aware — dark mode and high contrast are supported via PatternFly design tokens, switchable from the masthead.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "dashboard-dark.png" "alt" "Bor Dashboard in dark mode") }}
         </figure>
       </div>
 
@@ -39,7 +47,7 @@
         <h3 class="title is-4">Policies</h3>
         <p class="mb-4">Browse and manage desktop policies with search and filtering by type, status, and bindings. Thunderbird, Microsoft Edge, and Firewalld policies join Firefox, Chrome, Package, dconf, KConfig, and Polkit — and policies are released or archived directly from the list.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policies-list.png" | relURL }}" alt="Policies List">
+          {{ partial "screenshot.html" (dict "file" "policies-list.png" "alt" "Policies List") }}
         </figure>
       </div>
 
@@ -47,15 +55,47 @@
         <h3 class="title is-4">Policy Editor</h3>
         <p class="mb-4">Policies are created and edited on a full, deep-linkable page — no more stacked modals. Editors include an unsaved-changes guard, confirmation for destructive type changes, and JSON validation. Policies start in draft and are only delivered to agents once explicitly released.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-editor.png" | relURL }}" alt="Full-page Policy Editor">
+          {{ partial "screenshot.html" (dict "file" "policy-editor.png" "alt" "Full-page Policy Editor") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Firefox Policy Configuration</h3>
-        <p class="mb-4">Configure granular Firefox ESR settings organised by category — updates, privacy, network, security, homepage, and extensions — with per-key lock support.</p>
+        <p class="mb-4">Granular Firefox ESR settings in the tree editor, organised by category — updates, privacy &amp; telemetry, network, security, and more. Released policies show a read-only Configuration view with lifecycle actions (Unpublish / Archive) in the header.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-configuration.png" | relURL }}" alt="Firefox Policy Configuration">
+          {{ partial "screenshot.html" (dict "file" "policy-configuration.png" "alt" "Firefox Policy Configuration") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Thunderbird Policy</h3>
+        <p class="mb-4">Manage Mozilla Thunderbird with the complete policy catalogue — the agent writes the managed <code>policies.json</code>, covering RPM/DEB and Flatpak installations alike.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "policy-thunderbird.png" "alt" "Thunderbird Policy Configuration") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Chrome / Chromium Policy</h3>
+        <p class="mb-4">Manage Chrome and Chromium settings — homepage and startup, browser UI, extensions, Safe Browsing, network/proxy, and privacy — through the same tree editor.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "policy-chrome.png" "alt" "Chrome / Chromium Policy Configuration") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Microsoft Edge Policy</h3>
+        <p class="mb-4">Manage Microsoft Edge for Business on Linux desktops. The agent writes <code>bor_managed.json</code> into each Edge managed-policy directory and cleans it up when the last bound policy is removed.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "policy-edge.png" "alt" "Microsoft Edge Policy Configuration") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Firewalld Zone Policy</h3>
+        <p class="mb-4">Manage firewalld zones on enrolled nodes — services, ports, forward ports, rich rules, masquerade, and zone target. The agent validates with <code>firewall-cmd --check-config</code> before reloading, and zone files are tamper-protected.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "policy-firewalld.png" "alt" "Firewalld Zone Policy Configuration") }}
         </figure>
       </div>
 
@@ -63,31 +103,31 @@
         <h3 class="title is-4">dconf / GNOME Policy</h3>
         <p class="mb-4">Define dconf key-value entries that the agent writes to the managed GNOME desktop. Each entry can optionally be locked to prevent user override.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-dconf.png" | relURL }}" alt="dconf GNOME Policy Configuration">
+          {{ partial "screenshot.html" (dict "file" "policy-dconf.png" "alt" "dconf GNOME Policy Configuration") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
-        <h3 class="title is-4">KDE/KConfig — System Settings Restrictions</h3>
-        <p class="mb-4">Restrict access to individual KDE System Settings modules by category — window manager, appearance, screen lock, security, and more. Modules marked as restricted are hidden from users entirely.</p>
+        <h3 class="title is-4">KDE/KConfig — Kiosk Restrictions</h3>
+        <p class="mb-4">Restrict KDE Kiosk actions and lock down individual System Settings (KCM) modules by category — window manager, appearance, screen lock, security, and more. Restricted modules are hidden from users entirely.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-kconfig-restrictions.png" | relURL }}" alt="KDE KConfig System Settings Module Restrictions">
+          {{ partial "screenshot.html" (dict "file" "policy-kconfig-restrictions.png" "alt" "KDE KConfig Kiosk and System Settings Restrictions") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Polkit Policy</h3>
-        <p class="mb-4">Author Polkit rules through a structured form — define action IDs, groups, session requirements, variable conditions, and result (allow / deny / authenticate). Bor generates and deploys the JavaScript rule automatically.</p>
+        <p class="mb-4">Author Polkit rules through a structured form — exact action IDs, action prefixes, subject filters, and <code>action.lookup()</code> variable conditions for matching on action variables. Bor generates and deploys the JavaScript rule automatically.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-polkit.png" | relURL }}" alt="Polkit Policy Configuration">
+          {{ partial "screenshot.html" (dict "file" "policy-polkit.png" "alt" "Polkit Policy Configuration with variable conditions") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Package Policy — Repositories</h3>
-        <p class="mb-4">Add APT, DNF/YUM, or Zypper repositories to a Package policy. Fields adapt to the selected repository type; GPG key upload is supported for all types.</p>
+        <p class="mb-4">Add APT, DNF/YUM, or Zypper repositories to a Package policy — with one-click import helpers for Ubuntu PPAs, openSUSE 1-Click files, and Fedora COPR. GPG key upload is supported for all repository types.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-package-repository.png" | relURL }}" alt="Package Policy — Repositories tab">
+          {{ partial "screenshot.html" (dict "file" "policy-package-repository.png" "alt" "Package Policy — Repositories") }}
         </figure>
       </div>
 
@@ -95,7 +135,7 @@
         <h3 class="title is-4">Package Policy — Packages</h3>
         <p class="mb-4">Manage individual packages with desired state (present, absent, or latest), optional version pinning, and an optional flag for non-critical packages.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-package.png" | relURL }}" alt="Package Policy — Packages tab">
+          {{ partial "screenshot.html" (dict "file" "policy-package.png" "alt" "Package Policy — Packages") }}
         </figure>
       </div>
 
@@ -103,15 +143,15 @@
         <h3 class="title is-4">Ubuntu PPA Import</h3>
         <p class="mb-4">Enter a <code>ppa:owner/name</code> address and select an Ubuntu codename. The server fetches the repository URI and signing key from Launchpad automatically.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-package-ppa.png" | relURL }}" alt="Add Ubuntu PPA dialog">
+          {{ partial "screenshot.html" (dict "file" "policy-package-ppa.png" "alt" "Add Ubuntu PPA dialog") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">openSUSE 1-Click (.ymp) Import</h3>
-        <p class="mb-4">Upload a <code>.ymp</code> file and the server parses it, populating repositories and packages in one step. The banner confirms how many repositories and packages were imported.</p>
+        <p class="mb-4">Upload a <code>.ymp</code> file and the server parses it, populating repositories and packages in one step — with duplicate detection for already-present entries.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-package-ymp.png" | relURL }}" alt="openSUSE .ymp import result">
+          {{ partial "screenshot.html" (dict "file" "policy-package-ymp.png" "alt" "openSUSE .ymp import result") }}
         </figure>
       </div>
 
@@ -119,7 +159,7 @@
         <h3 class="title is-4">Nodes</h3>
         <p class="mb-4">Monitor enrolled desktop agents with connectivity status, OS, group membership, last-seen time, and agent version. Lists are paginated, filtered, and sorted server-side, with searchable filter dropdowns, editable notes, and CSV export.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management">
+          {{ partial "screenshot.html" (dict "file" "nodes.png" "alt" "Nodes Management") }}
         </figure>
       </div>
 
@@ -127,7 +167,7 @@
         <h3 class="title is-4">Node Groups</h3>
         <p class="mb-4">Organise nodes into logical groups. One-time enrollment tokens are generated per group and expire after five minutes.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Tokens">
+          {{ partial "screenshot.html" (dict "file" "node-groups.png" "alt" "Node Groups and Enrollment Tokens") }}
         </figure>
       </div>
 
@@ -135,7 +175,7 @@
         <h3 class="title is-4">Policy Bindings</h3>
         <p class="mb-4">Assign policies to node groups. Nodes inherit all bindings from every group they belong to. A priority field controls which binding wins when multiple policies of the same type apply to the same node.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings">
+          {{ partial "screenshot.html" (dict "file" "policy-bindings.png" "alt" "Policy Bindings") }}
         </figure>
       </div>
 
@@ -143,15 +183,39 @@
         <h3 class="title is-4">Audit Logs</h3>
         <p class="mb-4">Every administrative action is recorded with a timestamp, actor, action, resource, and source IP. Logs are searchable, filterable, and exportable as CSV or JSON — with spreadsheet formula injection protection built in.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/audit-logs.png" | relURL }}" alt="Audit Logs">
+          {{ partial "screenshot.html" (dict "file" "audit-logs.png" "alt" "Audit Logs") }}
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Settings</h3>
-        <p class="mb-4">Administer users, roles, and user groups with per-action RBAC permissions, configure agent notifications, and enforce a fleet-wide MFA policy — TOTP authenticator apps or WebAuthn/FIDO2 security keys.</p>
+        <p class="mb-4">Administer users, roles, and user groups with per-action RBAC permissions, configure agent notifications, and enforce a fleet-wide MFA policy.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/settings-users.png" | relURL }}" alt="Settings — Users, Roles, and MFA Policy">
+          {{ partial "screenshot.html" (dict "file" "settings-users.png" "alt" "Settings — Users, Roles, and MFA Policy") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">MFA Policy</h3>
+        <p class="mb-4">Require multi-factor authentication for all local user accounts, with a configurable TOTP algorithm — SHA256 for broad compatibility or SHA512 for a higher security margin.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "settings-mfa-policy.png" "alt" "Fleet-wide MFA Policy settings") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Account Security</h3>
+        <p class="mb-4">Users can secure their account with a second factor: a TOTP authenticator app (FreeOTP, Aegis, Google Authenticator) or a hardware or software security key via WebAuthn/FIDO2 (YubiKey, Bitwarden, 1Password).</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "account-security-2fa.png" "alt" "Account Security — TOTP and WebAuthn setup") }}
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Two-Factor Enrollment</h3>
+        <p class="mb-4">TOTP enrollment with a QR code for any authenticator app, a manual entry secret as fallback, and backup codes that must be acknowledged on completion.</p>
+        <figure class="image">
+          {{ partial "screenshot.html" (dict "file" "mfa-totp-setup.png" "alt" "Two-factor enrollment — TOTP QR code setup") }}
         </figure>
       </div>
 
@@ -159,7 +223,7 @@
         <h3 class="title is-4">Desktop Notifications</h3>
         <p class="mb-4">The Bor agent notifies the user on the desktop when a policy is updated, prompting them to restart affected applications for the change to take effect.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent">
+          {{ partial "screenshot.html" (dict "file" "desktop-notification.png" "alt" "Desktop Notification from Bor Agent") }}
         </figure>
       </div>
 

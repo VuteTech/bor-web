@@ -1,0 +1,5 @@
+{{- /* Fingerprinted screenshot image. Usage:
+     {{ partial "screenshot.html" (dict "file" "dashboard.png" "alt" "Bor Dashboard") }} */ -}}
+{{- $img := resources.Get (printf "images/screenshots/%s" .file) -}}
+{{- if not $img -}}{{ errorf "screenshot.html: images/screenshots/%s not found in assets" .file }}{{- end -}}
+<img src="{{ ($img | fingerprint "md5").RelPermalink }}" alt="{{ .alt }}" width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
