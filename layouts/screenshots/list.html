@@ -20,8 +20,16 @@
     <div class="columns is-multiline">
 
       <div class="column is-12">
+        <h3 class="title is-4">Two-Step Login</h3>
+        <p class="mb-4">The redesigned login asks for the username first, then the password or MFA factor. The password step includes a reveal toggle and a live Caps Lock warning.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/login-password-reveal.png" | relURL }}" alt="Two-step login — password step with reveal toggle and Caps Lock warning">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
         <h3 class="title is-4">Dashboard</h3>
-        <p class="mb-4">Fleet overview with node status indicators, OS distribution, policy counts, binding coverage by group, and certificate expiry tracking.</p>
+        <p class="mb-4">Fleet overview with drill-down stat tiles — node status, OS distribution, agent versions, and policy counts link straight to pre-filtered list views. The sidebar is grouped into Fleet, Policy, and System.</p>
         <figure class="image">
           <img src="{{ "images/screenshots/dashboard.png" | relURL }}" alt="Bor Dashboard">
         </figure>
@@ -29,17 +37,17 @@
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Policies</h3>
-        <p class="mb-4">Browse and manage desktop policies with search, filtering by type, status, and bindings. Each update creates a new immutable version.</p>
+        <p class="mb-4">Browse and manage desktop policies with search and filtering by type, status, and bindings. Thunderbird, Microsoft Edge, and Firewalld policies join Firefox, Chrome, Package, dconf, KConfig, and Polkit — and policies are released or archived directly from the list.</p>
         <figure class="image">
           <img src="{{ "images/screenshots/policies-list.png" | relURL }}" alt="Policies List">
         </figure>
       </div>
 
       <div class="column is-12 mt-5">
-        <h3 class="title is-4">Creating a Policy</h3>
-        <p class="mb-4">Create a new policy by selecting its type and initial state. Policies start in draft and are only delivered to agents once explicitly released.</p>
+        <h3 class="title is-4">Policy Editor</h3>
+        <p class="mb-4">Policies are created and edited on a full, deep-linkable page — no more stacked modals. Editors include an unsaved-changes guard, confirmation for destructive type changes, and JSON validation. Policies start in draft and are only delivered to agents once explicitly released.</p>
         <figure class="image">
-          <img src="{{ "images/screenshots/create-policy.png" | relURL }}" alt="Create Policy Dialog">
+          <img src="{{ "images/screenshots/policy-editor.png" | relURL }}" alt="Full-page Policy Editor">
         </figure>
       </div>
 
@@ -69,89 +77,9 @@
 
       <div class="column is-12 mt-5">
         <h3 class="title is-4">Polkit Policy</h3>
-        <p class="mb-4">Author Polkit rules through a structured form — define action IDs, groups, session requirements, and result (allow / deny / authenticate). Bor generates and deploys the JavaScript rule automatically.</p>
+        <p class="mb-4">Author Polkit rules through a structured form — define action IDs, groups, session requirements, variable conditions, and result (allow / deny / authenticate). Bor generates and deploys the JavaScript rule automatically.</p>
         <figure class="image">
           <img src="{{ "images/screenshots/policy-polkit.png" | relURL }}" alt="Polkit Policy Configuration">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Nodes</h3>
-        <p class="mb-4">Monitor enrolled desktop agents with connectivity status, OS, desktop environment, group membership, and details such as FQDN, IP address, and agent version.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Node Groups</h3>
-        <p class="mb-4">Organise nodes into logical groups. One-time enrollment tokens are generated per group and expire after five minutes.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Tokens">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Policy Bindings</h3>
-        <p class="mb-4">Assign policies to node groups. Nodes inherit all bindings from every group they belong to. A priority field controls which binding wins when multiple policies of the same type apply to the same node.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Creating a Policy Binding</h3>
-        <p class="mb-4">Bind a policy to a node group in one step — select the policy, the target group, set the binding state and priority, and confirm. Changes are streamed to affected agents immediately.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/create-policy-binding.png" | relURL }}" alt="Create Policy Binding Dialog">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Audit Logs</h3>
-        <p class="mb-4">Every administrative action is recorded with a timestamp, actor, source IP, resource type, and resource ID. Logs are searchable, filterable, and exportable as CSV or JSON.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/audit-logs-detail.png" | relURL }}" alt="Audit Logs with Event Detail">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Desktop Notifications</h3>
-        <p class="mb-4">The Bor agent notifies the user on the desktop when a policy is updated, prompting them to restart affected applications for the change to take effect.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">MFA Settings</h3>
-        <p class="mb-4">Enforce TOTP multi-factor authentication for all local user accounts. The TOTP algorithm is configurable — SHA256 for broad compatibility or SHA512 for a higher security margin.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/settings-mfa.png" | relURL }}" alt="MFA Settings">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Account Security</h3>
-        <p class="mb-4">Users can secure their account with a second factor: a TOTP authenticator app (FreeOTP, Google Authenticator, or any compatible app) or a hardware or software security key via WebAuthn/FIDO2 (YubiKey, Bitwarden, 1Password).</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/settings-account-security.png" | relURL }}" alt="Account Security — TOTP and WebAuthn setup">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">Dark Theme</h3>
-        <p class="mb-4">The web console ships with a dark theme for comfortable use in low-light environments.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/theme-dark.png" | relURL }}" alt="Dark Theme">
-        </figure>
-      </div>
-
-      <div class="column is-12 mt-5">
-        <h3 class="title is-4">High Contrast Theme</h3>
-        <p class="mb-4">A high-contrast theme is available for improved accessibility and readability.</p>
-        <figure class="image">
-          <img src="{{ "images/screenshots/theme-hicolor.png" | relURL }}" alt="High Contrast Theme">
         </figure>
       </div>
 
@@ -184,6 +112,54 @@
         <p class="mb-4">Upload a <code>.ymp</code> file and the server parses it, populating repositories and packages in one step. The banner confirms how many repositories and packages were imported.</p>
         <figure class="image">
           <img src="{{ "images/screenshots/policy-package-ymp.png" | relURL }}" alt="openSUSE .ymp import result">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Nodes</h3>
+        <p class="mb-4">Monitor enrolled desktop agents with connectivity status, OS, group membership, last-seen time, and agent version. Lists are paginated, filtered, and sorted server-side, with searchable filter dropdowns, editable notes, and CSV export.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/nodes.png" | relURL }}" alt="Nodes Management">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Node Groups</h3>
+        <p class="mb-4">Organise nodes into logical groups. One-time enrollment tokens are generated per group and expire after five minutes.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/node-groups.png" | relURL }}" alt="Node Groups and Enrollment Tokens">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Policy Bindings</h3>
+        <p class="mb-4">Assign policies to node groups. Nodes inherit all bindings from every group they belong to. A priority field controls which binding wins when multiple policies of the same type apply to the same node.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/policy-bindings.png" | relURL }}" alt="Policy Bindings">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Audit Logs</h3>
+        <p class="mb-4">Every administrative action is recorded with a timestamp, actor, action, resource, and source IP. Logs are searchable, filterable, and exportable as CSV or JSON — with spreadsheet formula injection protection built in.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/audit-logs.png" | relURL }}" alt="Audit Logs">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Settings</h3>
+        <p class="mb-4">Administer users, roles, and user groups with per-action RBAC permissions, configure agent notifications, and enforce a fleet-wide MFA policy — TOTP authenticator apps or WebAuthn/FIDO2 security keys.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/settings-users.png" | relURL }}" alt="Settings — Users, Roles, and MFA Policy">
+        </figure>
+      </div>
+
+      <div class="column is-12 mt-5">
+        <h3 class="title is-4">Desktop Notifications</h3>
+        <p class="mb-4">The Bor agent notifies the user on the desktop when a policy is updated, prompting them to restart affected applications for the change to take effect.</p>
+        <figure class="image">
+          <img src="{{ "images/screenshots/desktop-notification.png" | relURL }}" alt="Desktop Notification from Bor Agent">
         </figure>
       </div>
 
