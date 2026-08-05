@@ -36,6 +36,8 @@ params:
   navbar:
     - title: Download
       url: /download/
+    - title: Demo
+      url: /demo/
     - title: Docs
       url: /docs/
     - title: Screenshots
