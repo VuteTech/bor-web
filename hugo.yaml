@@ -81,41 +81,53 @@ params:
         text: A single server binary backed by PostgreSQL, and a single lightweight agent. No message queues, no sidecars, no external dependencies. Install from a native package, manage with systemd — from zero to your first enrolled node in minutes.
         icon: mouse-globe
   section4:
-    title: Project Status
-    subtitle: "What's built, what's in progress, and what's next"
-    columns:
-      - title: Done
-        color: done
-        items:
-          - Policy CRUD with draft / released / archived lifecycle
-          - gRPC streaming — delta sync and snapshot fallback
-          - Compliance reporting with per-item results
-          - Node status dashboard and fleet overview
-          - "Policies: Firefox, Chrome, KDE/KConfig, dconf, polkit"
-          - LDAP / AD with group-to-role mapping
-          - Kerberos (SPNEGO) — primary agent authentication, alternative to enrollment tokens
-          - WebAuthn / Passkey — web UI login
-          - PKCS#11 / HSM support for CA private keys
-          - Prometheus metrics endpoint
-          - Audit log with configurable retention
-          - RBAC — predefined roles, scope-aware
-          - "Packages: .deb .rpm .apk .pkg.tar.zst, multi-arch"
-          - Tamper protection — managed file modifications trigger audit log alerts
-          - mTLS connectivity between the server and the agents
-      - title: In Progress
-        color: progress
-        items:
-          - Multi-tenancy (RBAC scopes done, per-org data isolation pending)
-          - ACME / Let's Encrypt support for web UI TLS
-      - title: Planned
-        color: planned
-        items:
-          - systemd, package, and network policy types
-          - Flatpak and package management support
-          - Management of XDG Desktop portals
-          - FirewallD policy type
-          - Agent auto-update mechanism
-          - Policy templates library
+    title: Supported policies
+    subtitle: "What Bor can configure on your Linux desktops today"
+    groups:
+      - title: Browsers & mail
+        types:
+          - icon: Firefox
+            label: Firefox
+            tagline: "Browser policies: updates, privacy, security, restrictions"
+          - icon: Thunderbird
+            label: Thunderbird
+            tagline: "Mail client policies: updates, privacy, security"
+          - icon: Chrome
+            label: Chrome
+            technicalName: Chrome and Chromium
+            tagline: Browser policies for Google Chrome and Chromium
+          - icon: Edge
+            label: Microsoft Edge
+            tagline: Browser policies for Microsoft Edge on Linux
+      - title: Desktop environment
+        types:
+          - icon: Kconfig
+            label: KDE Plasma
+            technicalName: Kconfig
+            tagline: Kiosk restrictions, System Settings lockdown, look and feel
+          - icon: Dconf
+            label: Dconf
+            tagline: Mandatory GSettings keys for GNOME and other dconf desktops
+      - title: System & security
+        types:
+          - icon: Polkit
+            label: Polkit
+            tagline: Who may run privileged actions
+          - icon: Firewalld
+            label: Firewall
+            technicalName: firewalld
+            tagline: Zone services, ports, rich rules and target
+          - icon: SessionAccess
+            label: Session Access
+            tagline: When users and groups may use the desktop
+          - icon: Package
+            label: Package
+            tagline: Repositories and packages to install or remove
+          - icon: Flatpak
+            label: Flatpak apps
+            technicalName: flatpak
+            tagline: Remotes, apps and update settings for Flatpak
+    credit: "Product marks are trademarks of their respective owners. Icons: Simple Icons (CC0) and Font Awesome Free (CC BY 4.0)."
   footer:
     logo: logo-white.svg
     bulmalogo: false

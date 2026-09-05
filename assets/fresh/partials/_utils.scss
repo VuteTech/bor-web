@@ -179,14 +179,10 @@ Bor custom utilities
 }
 
 /* ==========================================================================
-Kanban board (Project Status section)
+Supported policies (policy-type tile grid, mirrors the console's create wizard)
 ========================================================================== */
 
-$kanban-done:     #2E7D32;
-$kanban-progress: #E65100;
-$kanban-planned:  #1565C0;
-
-.kanban-section {
+.policy-types-section {
     background: $section-grey;
     padding-bottom: 4rem;
 
@@ -195,76 +191,99 @@ $kanban-planned:  #1565C0;
     }
 }
 
-.kanban-board {
-    align-items: flex-start;
+.policy-type-group {
+    max-width: 1000px;
+    margin: 0 auto 2rem;
 }
 
-.kanban-col {
+.policy-type-group-title {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $blue-grey;
+    margin-bottom: 0.9rem;
+}
+
+.policy-type-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.policy-type-tile {
+    background: $white;
+    border: 1px solid $fade-grey;
     border-radius: 10px;
-    background: $white;
-    border: 1px solid $fade-grey;
-    overflow: hidden;
+    padding: 1rem 1rem 1.1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-    &--done     { border-top: 3px solid $kanban-done; }
-    &--progress { border-top: 3px solid $kanban-progress; }
-    &--planned  { border-top: 3px solid $kanban-planned; }
-}
-
-.kanban-col-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.85rem 1rem;
-    border-bottom: 1px solid $fade-grey;
-    background: $smoke-white;
-}
-
-.kanban-col-title {
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: $blue-grey;
-
-    .kanban-col--done &     { color: $kanban-done; }
-    .kanban-col--progress & { color: $kanban-progress; }
-    .kanban-col--planned &  { color: $kanban-planned; }
-}
-
-.kanban-col-count {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: $white;
-    background: $title-grey;
-    border-radius: 999px;
-    padding: 1px 7px;
-
-    .kanban-col--done &     { background: $kanban-done; }
-    .kanban-col--progress & { background: $kanban-progress; }
-    .kanban-col--planned &  { background: $kanban-planned; }
-}
-
-.kanban-col-body {
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.kanban-card {
-    background: $white;
-    border: 1px solid $fade-grey;
-    border-radius: 6px;
-    padding: 0.55rem 0.75rem;
-    font-size: 0.875rem;
-    color: $blue-grey;
-    line-height: 1.4;
-    transition: box-shadow 0.15s;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 
     &:hover {
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        border-color: $primary;
+        box-shadow: 0 6px 18px rgba(46, 125, 50, 0.12);
+        transform: translateY(-2px);
     }
+}
+
+.policy-type-tile-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+}
+
+.policy-type-icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: $dark-grey;
+    transition: color 0.2s;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    .policy-type-tile:hover & {
+        color: $primary;
+    }
+}
+
+.policy-type-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.policy-type-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $blue-grey;
+}
+
+.policy-type-technical {
+    font-size: 0.85rem;
+    color: $muted-grey;
+}
+
+.policy-type-tagline {
+    font-size: 0.9rem;
+    color: $medium-grey;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.policy-type-credit {
+    max-width: 1000px;
+    margin: 1.5rem auto 0;
+    font-size: 0.75rem;
+    color: $muted-grey;
+    text-align: center;
 }
 
 /* ==========================================================================

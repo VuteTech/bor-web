@@ -1,28 +1,46 @@
+{{- /* Supported policies: the policy-type tile grid from the console's
+       create-policy wizard, rendered from params.section4 in hugo.yaml.
+       Icons are inlined from assets/images/policy-types/<icon>.svg so they
+       take their colour from CSS. */ -}}
 {{- $s := .Site.Params.section4 }}
 {{- if $s }}
-<section class="section kanban-section" id="section4">
+<section class="section policy-types-section" id="section4">
   <div class="container">
     <div class="title-wrapper has-text-centered">
       <h2 class="title is-2">{{ $s.title }}</h2>
-      <p class="subtitle is-5">{{ $s.subtitle }}</p>
-    </div>
-    <div class="columns is-desktop kanban-board">
-      {{- range $s.columns }}
-      <div class="column">
-        <div class="kanban-col kanban-col--{{ .color }}">
-          <div class="kanban-col-header">
-            <span class="kanban-col-title">{{ .title }}</span>
-            <span class="kanban-col-count">{{ len .items }}</span>
-          </div>
-          <div class="kanban-col-body">
-            {{- range .items }}
-            <div class="kanban-card">{{ . }}</div>
-            {{- end }}
-          </div>
-        </div>
-      </div>
+      {{- with $s.subtitle }}
+      <p class="subtitle is-5 is-muted">{{ . }}</p>
       {{- end }}
+      <div class="divider is-centered"></div>
     </div>
+
+    {{- range $s.groups }}
+    <div class="policy-type-group">
+      <h3 class="policy-type-group-title">{{ .title }}</h3>
+      <ul class="policy-type-grid">
+        {{- range .types }}
+        <li class="policy-type-tile">
+          <div class="policy-type-tile-header">
+            <span class="policy-type-icon">
+              {{- with resources.Get (printf "images/policy-types/%s.svg" .icon) }}{{ .Content | safeHTML }}{{ end -}}
+            </span>
+            <div class="policy-type-name">
+              <span class="policy-type-label">{{ .label }}</span>
+              {{- with .technicalName }}
+              <span class="policy-type-technical">{{ . }}</span>
+              {{- end }}
+            </div>
+          </div>
+          <p class="policy-type-tagline">{{ .tagline }}</p>
+        </li>
+        {{- end }}
+      </ul>
+    </div>
+    {{- end }}
+
+    {{- with $s.credit }}
+    <p class="policy-type-credit">{{ . }}</p>
+    {{- end }}
   </div>
 </section>
 {{- end }}
