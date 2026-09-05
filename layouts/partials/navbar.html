@@ -12,6 +12,7 @@
         <img src="{{ printf "images/%s" $navbarLogo.image | relURL }}" alt="" width="{{ $navbarLogoWidth }}" height="{{ $navbarLogoHeight }}">
       </a>
       {{- end}}
+      {{ partial "eu-badge.html" . }}
 
       {{- if $sidebarVisible }}
       <a class="navbar-item is-hidden-desktop is-hidden-tablet">

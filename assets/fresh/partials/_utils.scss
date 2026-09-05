@@ -373,3 +373,34 @@ Download page
         }
     }
 }
+
+/* ==========================================================================
+Navbar badge — "European roots. Open to the world." (partials/eu-badge.html)
+========================================================================== */
+
+.navbar.is-fresh .navbar-brand .eu-badge-item {
+    padding-left: 0.25rem;
+}
+
+.eu-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem 0.35rem 0.6rem;
+    border: 1px solid $fade-grey;
+    border-radius: 999px;
+    background: $smoke-white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1;
+    color: $blue-grey;
+    white-space: nowrap;
+}
+
+.eu-badge-flag {
+    flex-shrink: 0;
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+}
