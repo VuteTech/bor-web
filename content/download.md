@@ -14,7 +14,7 @@ The server package installs the `bor-server` binary, a default configuration, an
 systemctl enable --now bor-server
 ```
 
-Open `https://your-server:8443` in your browser. TLS certificates and the internal CA are auto-generated on first run and stored in `/var/lib/bor/pki/`. See the [Server guide](/docs/server/) for configuration options.
+Open `https://your-server:8443` in your browser. TLS certificates and the internal CA are auto-generated on first run and stored in `/var/lib/bor/pki/`. See the [Server guide](https://docs.getbor.dev) for configuration options.
 
 ### Agent
 
@@ -39,4 +39,4 @@ Open `https://your-server:8443` in your browser. TLS certificates and the intern
    systemctl enable --now bor-agent
    ```
 
-See the [Agent guide](/docs/agent/) for full configuration options.
+See the [Agent guide](https://docs.getbor.dev) for full configuration options.

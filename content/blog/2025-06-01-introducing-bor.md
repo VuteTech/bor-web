@@ -52,7 +52,7 @@ Bor is in **active development** and has not yet reached an official release. Th
 - Role-based access control with granular permissions
 - Container-based server deployment
 
-We are working toward a first stable release. If you are interested in trying Bor or contributing, check out the [Getting Started](/docs/getting-started/) guide and the [GitHub repository](https://github.com/VuteTech/bor).
+We are working toward a first stable release. If you are interested in trying Bor or contributing, check out the [Getting Started](https://docs.getbor.dev) guide and the [GitHub repository](https://github.com/VuteTech/bor).
 
 ## What's Next
 

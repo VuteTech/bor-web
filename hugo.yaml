@@ -39,7 +39,7 @@ params:
     - title: Demo
       url: /demo/
     - title: Docs
-      url: /docs/
+      url: https://docs.getbor.dev
     - title: Screenshots
       url: /screenshots/
     - title: Blog
@@ -52,17 +52,17 @@ params:
       - title: Centralized management
         icon: mouse-globe
         text: Author and manage policies from a web console built with PatternFly. Organize nodes into groups and control access with RBAC.
-        url: /docs/server/
+        url: https://docs.getbor.dev
         buttonText: Learn more
       - title: Real-time delivery
         icon: laptop-cloud
         text: Policies stream to agents over gRPC the moment they change. Delta sync minimizes bandwidth; snapshot fallback guarantees consistency.
-        url: /docs/architecture/
+        url: https://docs.getbor.dev
         buttonText: Learn more
       - title: Secure by default
         icon: plug-cloud
         text: mTLS with an auto-generated internal CA. One-time token enrollment. No shared secrets, no polling, no plaintext.
-        url: /docs/agent/
+        url: https://docs.getbor.dev
         buttonText: Learn more
   section2:
     title: Built for enterprise Linux
@@ -137,19 +137,17 @@ params:
         links:
           - text: Download
             link: /download/
-          - text: Architecture
-            link: /docs/architecture/
-          - text: Contributing
-            link: /docs/contributing/
+          - text: Demo
+            link: /demo/
+          - text: Screenshots
+            link: /screenshots/
       column2:
         title: "Documentation"
         links:
-          - text: Server
-            link: /docs/server/
-          - text: Agent
-            link: /docs/agent/
-          - text: GitHub
-            link: https://github.com/VuteTech/bor/tree/master/docs
+          - text: Documentation
+            link: https://docs.getbor.dev
+          - text: Blog
+            link: /blog/
       column3:
         title: "Community"
         links:
