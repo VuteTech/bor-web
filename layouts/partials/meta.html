@@ -1,9 +1,10 @@
-{{ template "_internal/google_analytics.html" . }}
 {{ if eq .Site.Params.openGraph true }}
 {{ template "_internal/opengraph.html" . }}
+{{ template "_internal/twitter_cards.html" . }}
 {{ end }}
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . | plainify | truncate 160 "…" }}{{ else }}{{ .Site.Params.description }}{{ end }}{{ end }}" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ with .Site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" title="Bor blog" href="{{ .Permalink }}">{{ end }}{{ end }}

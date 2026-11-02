@@ -1,0 +1,22 @@
+{{- /* Overrides the theme partial: Open Sans is self-hosted (font-face rules
+     in assets/fresh/partials/_utils.scss, files under static/fonts/open-sans),
+     so no request goes to Google Fonts. */ -}}
+{{- $inServerMode := "" }}
+{{- if gt (int (index (split hugo.Version ".") 1)) "120" }}
+  {{ $inServerMode = hugo.IsServer }}
+{{- else }}
+  {{ $inServerMode = .Site.IsServer }}
+{{- end }}
+{{- $sass         := "style.sass" }}
+{{- $cssTarget    := "css/style.css" }}
+{{- $cssOpts      := cond ($inServerMode) (dict "targetPath" $cssTarget "enableSourceMap" true) (dict "targetPath" $cssTarget "outputStyle" "compressed") }}
+<link rel="icon" type="image/png" href="{{ "images/favicon.png" | relURL }}" />
+<link rel="preload" href="{{ "fonts/open-sans/open-sans-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+{{- if $inServerMode }}
+{{- $css := resources.Get $sass | toCSS $cssOpts }}
+<link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}">
+{{- else }}
+{{- $css := resources.Get $sass | toCSS $cssOpts | minify | fingerprint }}
+<link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- end }}
+<link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">

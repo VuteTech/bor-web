@@ -1,0 +1,24 @@
+{{ define "title" }}Page not found | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+<section class="section is-medium">
+  <div class="container has-text-centered">
+    <h1 class="title section-title">Page not found</h1>
+    <h5 class="subtitle is-5 is-muted">The address may be out of date. These are the places people usually look for.</h5>
+    <div class="divider is-centered"></div>
+    <div class="buttons is-centered mt-5">
+      <a class="button cta rounded primary-btn raised" href="/">Home</a>
+      <a class="button rounded secondary-btn raised" href="/download/">Download</a>
+      <a class="button rounded secondary-btn raised" href="https://docs.getbor.dev">Documentation</a>
+      <a class="button rounded secondary-btn raised" href="/blog/">Blog</a>
+    </div>
+  </div>
+</section>
+
+{{ if .Site.Params.footer }}
+{{ partial "footer.html" . }}
+{{ end }}
+{{ end }}

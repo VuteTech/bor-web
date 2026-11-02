@@ -40,29 +40,33 @@ The server package installs the `bor-server` binary, a default configuration, an
 systemctl enable --now bor-server
 ```
 
-Open `https://your-server:8443` in your browser. TLS certificates and the internal CA are auto-generated on first run and stored in `/var/lib/bor/pki/`. See the [Server guide](https://docs.getbor.dev) for configuration options.
+Open `https://your-server:8443` in your browser. TLS certificates and the internal CA are auto-generated on first run and stored in `/var/lib/bor/pki/`. See [Installing the server](https://docs.getbor.dev/installation/server/) for the configuration options.
 
 ### Agent
 
-1. Create `/etc/bor/config.yaml`:
+The quickest way is the **Deploy agent** wizard in the server's web console (the download icon in the masthead, or the button on the **Nodes** page). Pick the distribution, the architecture and the node group, and run the generated script on the desktop: it trusts the server's CA, adds the server's signed package repository, installs the agent and enrolls it with a one-time token. Nothing on the desktop needs internet access.
+
+To do it by hand with a downloaded package:
+
+1. Install the package, then point the agent at your server in `/etc/bor/config.yaml`:
 
    ```yaml
    server:
      address: "your-server:8443"
    ```
 
-2. Generate a one-time enrollment token in the web UI under **Node Groups**.
-
-3. Enroll the agent:
+2. Generate a one-time enrollment token in the web console under **Node Groups**, save it to a root-only file and enroll:
 
    ```bash
-   bor-agent --token <TOKEN>
+   sudo install -m 0600 /dev/null /etc/bor/enroll-token
+   echo "<TOKEN>" | sudo tee /etc/bor/enroll-token >/dev/null
+   sudo bor-agent --token-file /etc/bor/enroll-token
    ```
 
-4. Start the agent service:
+3. Start the agent service:
 
    ```bash
-   systemctl enable --now bor-agent
+   sudo systemctl enable --now bor-agent
    ```
 
-See the [Agent guide](https://docs.getbor.dev) for full configuration options.
+See [Installing the agent](https://docs.getbor.dev/installation/agent/) for the repository setup, Kerberos enrollment without tokens, and troubleshooting.

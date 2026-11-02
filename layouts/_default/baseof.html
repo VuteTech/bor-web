@@ -1,0 +1,27 @@
+{{- /* Overrides the theme's base template only to read the site locale
+     through .Site.Language.Locale; the theme still uses .Site.LanguageCode,
+     deprecated in Hugo 0.158. Everything else is the theme's markup. */ -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale }}">
+  <head>
+    {{ partial "meta.html" . }}
+    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    {{ partial "css.html" . }}
+  </head>
+  <body>
+    {{ if ne .Site.Params.preloader false }}
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+    {{ end }}
+
+    {{ block "main" . }}
+    {{ end }}
+
+    <!-- Back To Top Button -->
+    <div id="backtotop"><a href="#"></a></div>
+
+    {{ partial "javascript.html" . }}
+  </body>
+</html>

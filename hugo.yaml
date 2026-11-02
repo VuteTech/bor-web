@@ -1,5 +1,5 @@
 baseURL: https://getbor.dev/
-languageCode: en-us
+locale: en-US
 title: Bor
 
 module:
@@ -53,18 +53,18 @@ params:
       - title: Centralized management
         icon: mouse-globe
         text: Author and manage policies from a web console built with PatternFly. Organize nodes into groups and control access with RBAC.
-        url: https://docs.getbor.dev
-        buttonText: Learn more
+        url: https://docs.getbor.dev/getting-started/concepts/
+        buttonText: Read the concepts
       - title: Real-time delivery
         icon: laptop-cloud
         text: Policies stream to agents over gRPC the moment they change. Delta sync minimizes bandwidth; snapshot fallback guarantees consistency.
-        url: https://docs.getbor.dev
-        buttonText: Learn more
+        url: https://docs.getbor.dev/development/architecture/
+        buttonText: See the architecture
       - title: Secure by default
         icon: plug-cloud
         text: mTLS with an auto-generated internal CA. One-time token enrollment. No shared secrets, no polling, no plaintext.
-        url: https://docs.getbor.dev
-        buttonText: Learn more
+        url: https://docs.getbor.dev/security/hardening/
+        buttonText: Security guide
   section2:
     title: Built for enterprise Linux
     subtitle: Lightweight, native, and open source

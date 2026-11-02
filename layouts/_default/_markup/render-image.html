@@ -1,11 +1,25 @@
-{{- /* Serve markdown images from assets/ with a content-hash URL when available,
-     so replaced files (same name, new content) never hit a stale browser cache. */ -}}
+{{- /* Markdown images from assets/ are served with content-hashed URLs (so a
+     replaced file never hits a stale cache) and, for raster images, with
+     WebP variants in a srcset so a 2560px screenshot is not sent to a phone
+     as a 500 KB PNG. Other images (SVG, external URLs) pass through. */ -}}
 {{- $u := urls.Parse .Destination -}}
 {{- $img := "" -}}
 {{- if not $u.IsAbs -}}
   {{- $img = resources.Get (strings.TrimPrefix "/" $u.Path) -}}
 {{- end -}}
-{{- if $img -}}
+{{- $raster := and $img (in (slice ".png" ".jpg" ".jpeg" ".webp") (path.Ext $u.Path | lower)) -}}
+{{- if $raster -}}
+  {{- $set := slice -}}
+  {{- range slice 960 1600 -}}
+    {{- if lt . $img.Width -}}
+      {{- $v := $img.Resize (printf "%dx webp q82" .) -}}
+      {{- $set = $set | append (printf "%s %dw" $v.RelPermalink .) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $native := $img.Resize (printf "%dx webp q82" $img.Width) -}}
+  {{- $set = $set | append (printf "%s %dw" $native.RelPermalink $img.Width) -}}
+<img src="{{ ($img | fingerprint "md5").RelPermalink }}" srcset="{{ delimit $set ", " }}" sizes="(min-width: 1024px) 960px, 100vw" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
+{{- else if $img -}}
 <img src="{{ ($img | fingerprint "md5").RelPermalink }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
 {{- else -}}
 <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>

@@ -1,5 +1,16 @@
-{{- /* Fingerprinted screenshot image. Usage:
-     {{ partial "screenshot.html" (dict "file" "dashboard.png" "alt" "Bor Dashboard") }} */ -}}
+{{- /* Fingerprinted screenshot image with WebP variants. Usage:
+     {{ partial "screenshot.html" (dict "file" "dashboard.png" "alt" "Bor Dashboard") }}
+     The gallery shows images at the container width (up to 1344px), so the
+     srcset offers 960, 1600 and the native width. */ -}}
 {{- $img := resources.Get (printf "images/screenshots/%s" .file) -}}
 {{- if not $img -}}{{ errorf "screenshot.html: images/screenshots/%s not found in assets" .file }}{{- end -}}
-<img src="{{ ($img | fingerprint "md5").RelPermalink }}" alt="{{ .alt }}" width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
+{{- $set := slice -}}
+{{- range slice 960 1600 -}}
+  {{- if lt . $img.Width -}}
+    {{- $v := $img.Resize (printf "%dx webp q82" .) -}}
+    {{- $set = $set | append (printf "%s %dw" $v.RelPermalink .) -}}
+  {{- end -}}
+{{- end -}}
+{{- $native := $img.Resize (printf "%dx webp q82" $img.Width) -}}
+{{- $set = $set | append (printf "%s %dw" $native.RelPermalink $img.Width) -}}
+<img src="{{ ($img | fingerprint "md5").RelPermalink }}" srcset="{{ delimit $set ", " }}" sizes="(min-width: 1408px) 1344px, (min-width: 1216px) 1152px, 100vw" alt="{{ .alt }}" width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
