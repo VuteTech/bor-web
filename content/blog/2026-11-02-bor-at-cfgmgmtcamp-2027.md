@@ -7,6 +7,12 @@ tags: ["event", "cfgmgmtcamp", "talk", "community"]
 heropill: false
 ---
 
+<p class="has-text-centered">
+  <a href="https://cfgmgmtcamp.org/ghent2027/" title="CfgMgmtCamp 2027, Ghent">
+    <img src="/images/events/cfgmgmtcamp.png" alt="Config Management Camp" width="355" height="129">
+  </a>
+</p>
+
 From 1 to 3 February 2027, Bor goes to [CfgMgmtCamp](https://cfgmgmtcamp.org/ghent2027/) in Ghent, Belgium, and I will give a talk there: **Bor: Centralized Policy Management for Linux Desktops**.
 
 CfgMgmtCamp is the conference of the infrastructure automation community. It started around configuration management and has grown to cover provisioning, orchestration and everything else that keeps infrastructure in a known state. It takes place at HoGent's Campus Schoonmeersen, a short walk from Gent-Sint-Pieters station, in the days right after FOSDEM, so a lot of people make the two a single trip.
