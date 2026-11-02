@@ -3,6 +3,7 @@
 {{- $subtitle   := index $hero "subtitle" }}
 {{- $buttonText := index $hero "buttontext" }}
 {{- $buttonLink := index $hero "buttonlink" }}
+{{- $buttonNewTab := index $hero "buttonnewtab" }}
 {{- $image      := index $hero "image" }}
 <div class="hero-body hero-body--app">
   <div class="container">
@@ -16,7 +17,7 @@
       </h2>
       {{ end }}
       <p>
-        <a class="button cta rounded primary-btn raised" href="{{ $buttonLink }}">
+        <a class="button cta rounded primary-btn raised" href="{{ $buttonLink }}"{{ if $buttonNewTab }} target="_blank" rel="noopener"{{ end }}>
           {{ $buttonText }}
         </a>
       </p>
