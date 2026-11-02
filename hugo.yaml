@@ -117,6 +117,10 @@ params:
             label: Firewall
             technicalName: firewalld
             tagline: Zone services, ports, rich rules and target
+          - icon: Systemd
+            label: Services & timers
+            technicalName: systemd
+            tagline: Service state, timer schedules and scheduled tasks
           - icon: SessionAccess
             label: Session Access
             tagline: When users and groups may use the desktop

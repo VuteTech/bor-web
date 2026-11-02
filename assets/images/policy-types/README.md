@@ -20,9 +20,12 @@ step. Each file is `fill="currentColor"` and is inlined by
 | `Firewalld.svg` | Font Awesome Free 5 `shield-alt` | CC BY 4.0 |
 | `SessionAccess.svg` | Font Awesome Free 5 `user-clock` | CC BY 4.0 |
 | `Package.svg` | Font Awesome Free 5 `cubes` | CC BY 4.0 |
+| `Systemd.svg` | PatternFly `process-automation` (pficon), via `@patternfly/react-icons` | MIT |
 
 Font Awesome Free icons are CC BY 4.0 (https://fontawesome.com/license/free);
-the attribution line rendered under the grid satisfies the licence. The
+the attribution line rendered under the grid satisfies the licence.
+PatternFly icons are MIT licensed
+(https://github.com/patternfly/patternfly/blob/main/LICENSE). The
 product marks (Firefox, Thunderbird, Chrome, Edge, KDE, Flatpak) remain
 trademarks of their owners and are used only to identify the product a
 policy configures.
