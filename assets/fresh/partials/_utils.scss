@@ -534,3 +534,47 @@ Hero: "New" pill for the newest post, and the two call-to-action buttons
         margin-bottom: 0.5rem;
     }
 }
+
+/* ==========================================================================
+Event banner above the homepage navbar (partials/event-banner.html)
+========================================================================== */
+
+.event-banner {
+    background: $primary;
+    color: #fff;
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+
+    .event-banner-link {
+        display: inline-block;
+        margin-left: 0.5rem;
+        padding: 0.1rem 0.7rem;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 999px;
+        color: #fff;
+        font-weight: 600;
+        white-space: nowrap;
+
+        &:hover {
+            background: #fff;
+            color: $primary;
+        }
+    }
+}
+
+/* Stacked cards on the talks page: same look as .dl-pkg-card, but no
+   height: 100%, which stretches a card that is not inside a grid cell. */
+.event-card {
+    border: 1px solid $fade-grey;
+    border-radius: 8px;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+        padding: 1.25rem;
+    }
+}

@@ -1,0 +1,55 @@
+# Talks and events shown on /talks/. Dates are ISO strings; an event is
+# "upcoming" until its end date has passed. Slides, pdf and video are shown
+# only after the event; leave video empty until a recording exists.
+- id: cfgmgmtcamp2027
+  event: CfgMgmtCamp 2027
+  start: "2027-02-01"
+  end: "2027-02-03"
+  when: "1 to 3 February 2027"
+  city: Ghent, Belgium
+  venue: HoGent Campus Schoonmeersen
+  url: https://cfgmgmtcamp.org/ghent2027/
+  format: Talk
+  summary: The infrastructure automation community's conference, held right after FOSDEM. A talk about Bor on the main programme.
+  talk:
+    title: "Bor: Centralized Policy Management for Linux Desktops"
+    when: Day and time follow with the published schedule
+    language: English
+  post: /blog/2026-11-02-bor-at-cfgmgmtcamp-2027/
+  video: ""
+
+- id: openfest2026
+  event: OpenFest 2026
+  start: "2026-11-07"
+  end: "2026-11-08"
+  when: "7 and 8 November 2026"
+  city: Sofia, Bulgaria
+  venue: Interpred WTC Sofia, 36 Dragan Tsankov Blvd
+  url: https://www.openfest.org/2026/
+  format: Talk and stand
+  summary: A stand for the whole weekend with Bor running live, and a talk on Saturday.
+  talk:
+    title: Policy management for Linux workstations with Bor
+    when: Saturday 7 November, 12:15, hall Varna
+    language: Bulgarian
+    duration: 45 minutes including a live demo
+    url: https://cfp.openfest.org/openfest-2026/talk/LCCN7F/
+  slides: /publications/openfest2026/
+  pdf: /publications/openfest2026/bor-openfest2026.pdf
+  video: ""
+  post: /blog/2026-10-15-bor-at-openfest-2026/
+
+- id: tuxcon2026
+  event: TuxCon 2026
+  start: "2026-05-16"
+  end: "2026-05-17"
+  when: "16 and 17 May 2026"
+  city: Plovdiv, Bulgaria
+  url: https://tuxcon.mobi/
+  format: Talk
+  summary: The first public talk about Bor, at the open source conference in Plovdiv.
+  talk:
+    title: Bor, policy management for Linux workstations
+  slides: /publications/tuxcon2026/
+  pdf: /publications/tuxcon2026/bor-tuxcon2026.pdf
+  video: ""

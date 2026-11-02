@@ -54,6 +54,12 @@ params:
     - title: Enterprise
       url: /enterprise/
   githubFollow: https://github.com/VuteTech/bor
+  # Announcement strip above the homepage navbar; disappears after "until".
+  eventbanner:
+    text: "Meet Bor at OpenFest in Sofia on 7 and 8 November: a stand both days, and a talk on Saturday at 12:15 in hall Varna."
+    link: /talks/
+    linktext: Talks and events
+    until: "2026-11-08"
   # Contact route shown on /enterprise/.
   enterprise:
     email: office@vute.tech
@@ -181,6 +187,8 @@ params:
             link: /screenshots/
           - text: Bor Enterprise
             link: /enterprise/
+          - text: Talks and events
+            link: /talks/
       column2:
         title: "Documentation"
         links:

@@ -1,0 +1,15 @@
+{{- /* Announcement strip above the homepage navbar, driven by
+     params.eventbanner {text, link, linktext, until}. It is left out of the
+     build once "until" has passed, and a visitor whose clock is past that
+     date does not see it even on a stale build. */ -}}
+{{- with .Site.Params.eventbanner }}
+{{- if ge .until (now.Format "2006-01-02") }}
+<div class="event-banner" id="event-banner" data-until="{{ .until }}">
+  <div class="container has-text-centered">
+    <span class="event-banner-text">{{ .text }}</span>
+    {{- with .link }} <a class="event-banner-link" href="{{ . }}">{{ $.Site.Params.eventbanner.linktext | default "Details" }}</a>{{ end }}
+  </div>
+</div>
+<script>(function(){var b=document.getElementById('event-banner');if(b&&new Date().toISOString().slice(0,10)>b.getAttribute('data-until')){b.parentNode.removeChild(b);}})();</script>
+{{- end }}
+{{- end }}

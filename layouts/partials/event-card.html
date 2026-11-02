@@ -1,0 +1,26 @@
+{{- /* One event from data/events.yaml, used by layouts/_default/talks.html.
+     Slides, PDF and recording are offered only once the event has ended. */ -}}
+{{- $ended := lt .end (now.Format "2006-01-02") }}
+<div class="card event-card mb-5">
+  <div class="card-content">
+    <p class="dl-pkg-name">{{ .event }} <span class="tag is-light">{{ .format }}</span></p>
+    <p class="mt-2 has-text-grey">{{ .when }}, {{ .city }}{{ with .venue }}, {{ . }}{{ end }}</p>
+    {{- with .summary }}<p class="mt-3">{{ . }}</p>{{ end }}
+    {{- with .talk }}
+    <p class="mt-3"><strong>{{ .title }}</strong>
+      {{- with .when }}<br>{{ . }}{{ end }}
+      {{- if or .language .duration }}<br><span class="has-text-grey">{{ with .language }}In {{ . }}{{ end }}{{ if and .language .duration }}, {{ end }}{{ .duration }}</span>{{ end }}
+    </p>
+    {{- end }}
+    <div class="buttons mt-4">
+      {{- if $ended }}
+      {{- with .slides }}<a href="{{ . }}" class="button is-small is-outlined is-dark">Slides</a>{{ end }}
+      {{- with .pdf }}<a href="{{ . }}" class="button is-small is-outlined is-dark">PDF</a>{{ end }}
+      {{- with .video }}<a href="{{ . }}" class="button is-small is-outlined is-dark">Recording</a>{{ end }}
+      {{- end }}
+      {{- with .talk }}{{ with .url }}<a href="{{ . }}" class="button is-small is-text">Talk in the programme</a>{{ end }}{{ end }}
+      {{- with .url }}<a href="{{ . }}" class="button is-small is-text">Event website</a>{{ end }}
+      {{- with .post }}<a href="{{ . }}" class="button is-small is-text">Blog post</a>{{ end }}
+    </div>
+  </div>
+</div>

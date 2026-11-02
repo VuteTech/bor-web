@@ -2,6 +2,8 @@
 
 {{ define "main" }}
 
+    {{ partial "event-banner.html" . }}
+
     {{ if .Site.Params.hero }}
     {{ partial "hero.html" . }}
     {{ end }}

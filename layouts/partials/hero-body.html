@@ -10,8 +10,9 @@
 <div class="hero-body hero-body--app">
   <div class="container">
     <div class="hero-intro has-text-centered">
+      {{- /* Newest blog post, skipping posts with "heropill: false" in front matter. */ -}}
       {{- if index $hero "latestpost" }}
-      {{- with index (where site.RegularPages "Section" "blog") 0 }}
+      {{- with index (where (where site.RegularPages "Section" "blog") "Params.heropill" "ne" false) 0 }}
       <p class="hero-latest">
         <a href="{{ .RelPermalink }}"><span class="hero-latest-tag">New</span><span>{{ .Title }}</span></a>
       </p>
