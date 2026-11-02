@@ -94,6 +94,29 @@
        </div>`
     );
 
+    // Checksums and their signature, published with every release since v0.10.0
+    const sums = rel.assets.find(a => a.name === 'SHA256SUMS');
+    const sig  = rel.assets.find(a => a.name === 'SHA256SUMS.asc');
+    if (sums) {
+      const sigBtn = sig
+        ? `<a href="${sig.browser_download_url}" class="button is-small is-outlined is-dark">SHA256SUMS.asc</a>`
+        : '';
+      grid.insertAdjacentHTML('beforeend',
+        `<div class="column is-6">
+           <div class="card dl-pkg-card">
+             <div class="card-content">
+               <p class="dl-pkg-name">Checksums <span class="tag is-light">verify your download</span></p>
+               <div class="buttons mt-2">
+                 <a href="${sums.browser_download_url}" class="button is-small is-outlined is-dark">SHA256SUMS</a>
+                 ${sigBtn}
+                 <a href="#verify-your-download" class="button is-small is-text">How to verify</a>
+               </div>
+             </div>
+           </div>
+         </div>`
+      );
+    }
+
     document.getElementById('dl-step-packages').style.display = '';
   }
 

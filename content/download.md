@@ -4,6 +4,32 @@ layout: "download"
 description: "Download Bor for your Linux distribution"
 ---
 
+## Verify your download
+
+Every release since v0.10.0 publishes a `SHA256SUMS` file and a detached
+signature `SHA256SUMS.asc` next to the packages. The signature is made with
+the Bor release key, the same key that signs the agent package repositories
+a Bor server serves at `/agent/`:
+
+| | |
+|---|---|
+| **Key** | Bor Release Signing `<releases@getbor.dev>` |
+| **Fingerprint** | `2BF2 F494 7388 D2CD F35D C9F5 BCC1 0DDB B54F 79FC` |
+| **Public key** | [bor-release-key.asc](/bor-release-key.asc) |
+
+```bash
+curl -LO https://getbor.dev/bor-release-key.asc
+gpg --import bor-release-key.asc
+gpg --fingerprint releases@getbor.dev     # compare with the fingerprint above
+
+# in the directory with the downloaded packages, SHA256SUMS and SHA256SUMS.asc
+gpg --verify SHA256SUMS.asc SHA256SUMS
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+`gpg --verify` must report a good signature from the key above, and
+`sha256sum` must print `OK` for every package you downloaded.
+
 ## After downloading
 
 ### Server
