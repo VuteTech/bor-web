@@ -1,0 +1,97 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+{{- $c := .Site.Params.community }}
+
+<section class="dl-hero">
+  <div class="container has-text-centered">
+    <h1 class="title is-2 has-text-white">{{ .Title }}</h1>
+    <p class="subtitle is-5 has-text-white-bis">{{ .Description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+
+        <div class="content mb-6">
+          {{ .Content }}
+        </div>
+
+        <div class="columns is-multiline">
+
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-comments"></i></span> Discussions</p>
+                <p class="mt-3">Questions, how-to threads, ideas for new policy types and show-and-tell. Searchable, so an answer helps the next person too.</p>
+                <p class="mt-3"><a href="{{ $c.discussions }}" class="button is-small is-outlined is-dark">Open GitHub Discussions</a></p>
+                <p class="mt-3 is-size-7 has-text-grey">Discussions live on GitHub for now. They will move to a self-hosted Discourse instance under the project's own control; the links here will follow, and nothing changes on your side.</p>
+              </div>
+            </div>
+          </div>
+
+          {{- with $c.matrix }}
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-hashtag"></i></span> Matrix chat</p>
+                <p class="mt-3">Real-time chat with the developers and other users. Join from any Matrix account, for example one on matrix.org; the room is public and its history is readable.</p>
+                <p class="mt-3"><a href="{{ printf "https://matrix.to/#/%s" (replace . "#" "%23") | safeURL }}" class="button is-small is-outlined is-dark"><code>{{ . }}</code></a></p>
+              </div>
+            </div>
+          </div>
+          {{- end }}
+
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-github"></i></span> Bug reports and code</p>
+                <p class="mt-3">Found a defect or want to contribute? Issues and pull requests are on GitHub. The <a href="https://docs.getbor.dev/development/contributing/">contributing guide</a> explains the workflow and the Contributor License Agreement.</p>
+                <p class="mt-3"><a href="{{ $c.issues }}" class="button is-small is-outlined is-dark">Issues</a> <a href="https://github.com/VuteTech/bor" class="button is-small is-outlined is-dark">Repository</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-envelope"></i></span> Email</p>
+                <p class="mt-3">For anything that does not belong in public, and for <strong>security vulnerabilities</strong>: never open a public issue for those. Reports are acknowledged within 48 hours and disclosure is coordinated with the reporter.</p>
+                <p class="mt-3"><a href="mailto:{{ $c.email }}" class="button is-small is-outlined is-dark">{{ $c.email }}</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-rss"></i></span> News</p>
+                <p class="mt-3">Release announcements, design write-ups and conference dates are on the blog, with an RSS feed. Videos and recorded talks are on YouTube.</p>
+                <p class="mt-3"><a href="/blog/" class="button is-small is-outlined is-dark">Blog</a> <a href="/blog/index.xml" class="button is-small is-outlined is-dark">RSS</a> <a href="{{ $c.youtube }}" class="button is-small is-outlined is-dark">YouTube</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-6">
+            <div class="card dl-pkg-card">
+              <div class="card-content">
+                <p class="dl-pkg-name"><span class="icon"><i class="fa fa-briefcase"></i></span> Bor Enterprise and support</p>
+                <p class="mt-3">Commercial support, licenses for Bor Enterprise and anything to do with a purchase go to Vute Tech, the company behind Bor.</p>
+                <p class="mt-3"><a href="https://vute.tech" class="button is-small is-outlined is-dark" target="_blank" rel="noopener">vute.tech</a></p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ partial "footer.html" . }}
+{{ end }}

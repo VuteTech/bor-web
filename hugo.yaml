@@ -45,7 +45,17 @@ params:
       url: /screenshots/
     - title: Blog
       url: /blog/
+    - title: Community
+      url: /community/
   githubFollow: https://github.com/VuteTech/bor
+  # Channels listed on /community/ and in the footer. Leave matrix empty until
+  # the room exists; the alias is shown as a matrix.to link once set.
+  community:
+    discussions: https://github.com/VuteTech/bor/discussions
+    issues: https://github.com/VuteTech/bor/issues
+    email: bor@vute.tech
+    matrix: "#bor:petrovs.info"
+    youtube: https://www.youtube.com/@getbor
   section1:
     title: How it works
     subtitle: A central server, lightweight agents, real-time streaming
@@ -172,6 +182,12 @@ params:
           - text: GitHub
             link: https://github.com/VuteTech/bor
             icon: github
+          - text: Discussions
+            link: https://github.com/VuteTech/bor/discussions
+            icon: comments
+          - text: Matrix chat
+            link: https://matrix.to/#/%23bor:petrovs.info
+            icon: hashtag
           - text: YouTube
             link: https://www.youtube.com/@getbor
             icon: youtube-play
