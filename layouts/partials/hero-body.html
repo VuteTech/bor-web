@@ -4,10 +4,19 @@
 {{- $buttonText := index $hero "buttontext" }}
 {{- $buttonLink := index $hero "buttonlink" }}
 {{- $buttonNewTab := index $hero "buttonnewtab" }}
+{{- $secondaryText := index $hero "secondarybuttontext" }}
+{{- $secondaryLink := index $hero "secondarybuttonlink" }}
 {{- $image      := index $hero "image" }}
 <div class="hero-body hero-body--app">
   <div class="container">
     <div class="hero-intro has-text-centered">
+      {{- if index $hero "latestpost" }}
+      {{- with index (where site.RegularPages "Section" "blog") 0 }}
+      <p class="hero-latest">
+        <a href="{{ .RelPermalink }}"><span class="hero-latest-tag">New</span><span>{{ .Title }}</span></a>
+      </p>
+      {{- end }}
+      {{- end }}
       <h1 class="title is-1 is-bold is-spaced">
         {{ $title }}
       </h1>
@@ -16,11 +25,16 @@
         {{ . }}
       </h2>
       {{ end }}
-      <p>
+      <div class="buttons is-centered hero-buttons">
         <a class="button cta rounded primary-btn raised" href="{{ $buttonLink }}"{{ if $buttonNewTab }} target="_blank" rel="noopener"{{ end }}>
           {{ $buttonText }}
         </a>
-      </p>
+        {{- if and $secondaryText $secondaryLink }}
+        <a class="button cta rounded secondary-btn raised" href="{{ $secondaryLink }}">
+          {{ $secondaryText }}
+        </a>
+        {{- end }}
+      </div>
     </div>
     <div class="app-window-wrap">
       <div class="app-window">

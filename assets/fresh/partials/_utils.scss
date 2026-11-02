@@ -486,3 +486,51 @@ Phones: stack the feature boxes and give the EU badge its own navbar line
         padding: 0.35rem 0.5rem;
     }
 }
+
+/* ==========================================================================
+Hero: "New" pill for the newest post, and the two call-to-action buttons
+========================================================================== */
+
+.hero-latest {
+    margin-bottom: 1.5rem;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.35rem 1rem 0.35rem 0.4rem;
+        border: 1px solid $fade-grey;
+        border-radius: 999px;
+        background: $smoke-white;
+        color: $blue-grey;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1.3;
+        text-align: left;
+        transition: border-color 0.2s, color 0.2s;
+
+        &:hover {
+            border-color: $primary;
+            color: $primary;
+        }
+    }
+}
+
+.hero-latest-tag {
+    flex-shrink: 0;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: $primary;
+    color: #fff;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.hero-buttons {
+    margin-top: 0.5rem;
+
+    .button {
+        margin-bottom: 0.5rem;
+    }
+}

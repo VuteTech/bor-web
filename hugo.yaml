@@ -33,6 +33,10 @@ params:
     buttontext: Get Started
     buttonlink: https://docs.getbor.dev/getting-started/quickstart/
     buttonnewtab: true
+    secondarybuttontext: Try the demo
+    secondarybuttonlink: /demo/
+    # The newest blog post is shown as a "New" pill above the headline.
+    latestpost: true
     image: bor-start.png
   navbar:
     - title: Download
