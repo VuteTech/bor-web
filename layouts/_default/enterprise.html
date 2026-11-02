@@ -1,0 +1,41 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ partial "navbar.html" . }}
+{{ partial "navbar-clone.html" . }}
+
+{{- $e := .Site.Params.enterprise }}
+
+<section class="dl-hero">
+  <div class="container has-text-centered">
+    <h1 class="title is-2 has-text-white">{{ .Title }}</h1>
+    <p class="subtitle is-5 has-text-white-bis">{{ .Description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+
+        <div class="content">
+          {{ .Content }}
+        </div>
+
+        <div class="box dl-widget mt-6 has-text-centered" id="get-in-touch">
+          <h2 class="title is-4">Get in touch</h2>
+          <p class="mb-4">Licenses, pricing and support for Bor Enterprise come from Vute Tech, the company behind Bor. Tell us about your fleet and what you need, and we will get back to you.</p>
+          <div class="buttons is-centered">
+            <a class="button cta rounded primary-btn raised" href="mailto:{{ $e.email }}?subject=Bor%20Enterprise">{{ $e.email }}</a>
+            <a class="button rounded secondary-btn raised" href="{{ $e.url }}" target="_blank" rel="noopener">vute.tech</a>
+          </div>
+          <p class="mt-4 is-size-7 has-text-grey">Questions about the open source edition belong on the <a href="/community/">community channels</a>, where they help the next person too.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ partial "footer.html" . }}
+{{ end }}

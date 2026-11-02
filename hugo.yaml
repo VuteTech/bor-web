@@ -47,7 +47,13 @@ params:
       url: /blog/
     - title: Community
       url: /community/
+    - title: Enterprise
+      url: /enterprise/
   githubFollow: https://github.com/VuteTech/bor
+  # Contact route shown on /enterprise/.
+  enterprise:
+    email: office@vute.tech
+    url: https://vute.tech
   # Channels listed on /community/ and in the footer. Leave matrix empty until
   # the room exists; the alias is shown as a matrix.to link once set.
   community:
@@ -169,6 +175,8 @@ params:
             link: /demo/
           - text: Screenshots
             link: /screenshots/
+          - text: Bor Enterprise
+            link: /enterprise/
       column2:
         title: "Documentation"
         links:
