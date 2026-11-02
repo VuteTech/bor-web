@@ -105,7 +105,7 @@ params:
           - icon: Kconfig
             label: KDE Plasma
             technicalName: Kconfig
-            tagline: Kiosk restrictions, System Settings lockdown, look and feel
+            tagline: Kiosk restrictions, System Settings lockdown, any KDE setting
           - icon: Dconf
             label: Dconf
             tagline: Mandatory GSettings keys for GNOME and other dconf desktops
@@ -122,6 +122,15 @@ params:
             label: Services & timers
             technicalName: systemd
             tagline: Service state, timer schedules and scheduled tasks
+          - icon: Selinux
+            label: SELinux
+            tagline: Enforcement mode, booleans, exceptions and modules
+          - icon: Apparmor
+            label: AppArmor
+            tagline: Profile modes, user namespace restriction and custom profiles
+          - icon: Updates
+            label: Software updates
+            tagline: Unattended updates, schedule, holds and the reboot
           - icon: SessionAccess
             label: Session Access
             tagline: When users and groups may use the desktop
@@ -132,6 +141,10 @@ params:
             label: Flatpak apps
             technicalName: flatpak
             tagline: Remotes, apps and update settings for Flatpak
+          - icon: DiskEncryption
+            label: Disk encryption
+            technicalName: LUKS
+            tagline: TPM2, Tang and escrowed recovery keys for LUKS2 volumes
     credit: "Product marks are trademarks of their respective owners. Icons: Simple Icons (CC0) and Font Awesome Free (CC BY 4.0)."
   footer:
     logo: logo-white.svg
