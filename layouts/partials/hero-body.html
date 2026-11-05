@@ -37,13 +37,24 @@
         {{- end }}
       </div>
     </div>
+    {{- /* Window frame styled after the KDE Breeze decoration: no titlebar icon,
+         centred bold title, and minimize / maximize / close chevron glyphs on
+         the right. The glyphs are decorative, hence aria-hidden. */ -}}
     <div class="app-window-wrap">
       <div class="app-window">
         <div class="app-window-bar">
-          <span class="app-dot app-dot--red"></span>
-          <span class="app-dot app-dot--yellow"></span>
-          <span class="app-dot app-dot--green"></span>
-          <span class="app-window-label">Bor — Policy Management</span>
+          <span class="app-window-label">Bor - Policy Management</span>
+          <span class="app-window-buttons" aria-hidden="true">
+            <span class="app-btn app-btn--minimize">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7 9 11.5 13.5 7"/></svg>
+            </span>
+            <span class="app-btn app-btn--maximize">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11 9 6.5 13.5 11"/></svg>
+            </span>
+            <span class="app-btn app-btn--close">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l8 8M13 5l-8 8"/></svg>
+            </span>
+          </span>
         </div>
         <img src="{{ printf "images/%s" $image | relURL }}" alt="Bor Policy Management dashboard">
       </div>

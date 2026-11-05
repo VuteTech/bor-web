@@ -1,3 +1,3 @@
 ---
-title: "Bor — Enterprise Linux Desktop Policy Management"
+title: "Bor - Enterprise Linux Desktop Policy Management"
 ---

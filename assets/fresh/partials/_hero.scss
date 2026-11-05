@@ -44,43 +44,81 @@ App-screenshot hero variant
     }
 }
 
+/* KDE Breeze window decoration: flat #e3e5e7 titlebar, 1px outline, bold
+   centred title, chevron glyph buttons on the right. */
 .app-window {
-    border-radius: 10px 10px 0 0;
+    --breeze-titlebar: #e3e5e7;
+    --breeze-outline: #{rgba(#1b1e20, 0.22)};
+    --breeze-text: #232629;
+
+    border-radius: 8px 8px 0 0;
     overflow: hidden;
-    border: 1px solid darken($fade-grey, 6%);
+    border: 1px solid var(--breeze-outline);
     border-bottom: none;
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.06),
         0 24px 64px rgba(0, 0, 0, 0.14);
 
     .app-window-bar {
-        background: #e4e4e4;
-        padding: 10px 16px;
+        position: relative;
+        background: var(--breeze-titlebar);
+        height: 34px;
+        padding: 0 5px;
         display: flex;
         align-items: center;
-        gap: 7px;
-        border-bottom: 1px solid darken($fade-grey, 10%);
+        justify-content: flex-end;
+        box-shadow: inset 0 -1px 0 #{rgba(#1b1e20, 0.12)};
     }
 
-    .app-dot {
-        width: 12px;
-        height: 12px;
+    // Breeze centres the title across the whole titlebar, with no app icon.
+    .app-window-label {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        text-align: center;
+        font-family: 'Noto Sans', 'Open Sans', sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--breeze-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-window-buttons {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .app-btn {
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--breeze-text);
+        transition: background-color 0.1s ease, color 0.1s ease;
 
-        &--red    { background: #ff5f57; }
-        &--yellow { background: #ffbd2e; }
-        &--green  { background: #28c940; }
-    }
+        svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
 
-    .app-window-label {
-        flex: 1;
-        text-align: center;
-        font-size: 0.75rem;
-        color: $muted-grey;
-        font-weight: 600;
-        font-family: 'Open Sans', sans-serif;
-        margin-right: 45px; // compensate for dots width so label is visually centered
+        &:hover {
+            background: #{rgba(#1b1e20, 0.1)};
+        }
+
+        // Breeze fills the close button red on hover.
+        &--close:hover {
+            background: #e93d3d;
+            color: #fff;
+        }
     }
 
     img {

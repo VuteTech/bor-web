@@ -29,7 +29,7 @@ params:
     sizes: [400, 600]
   hero:
     title: Policy management for Linux desktops
-    subtitle: Define, distribute, and enforce desktop configuration policies across your fleet — in real time. Open source, secure by default, built for enterprise Linux.
+    subtitle: Define, distribute, and enforce desktop configuration policies across your fleet - in real time. Open source, secure by default, built for enterprise Linux.
     buttontext: Get Started
     buttonlink: https://docs.getbor.dev/getting-started/quickstart/
     buttonnewtab: true
@@ -96,16 +96,16 @@ params:
     subtitle: Lightweight, native, and open source
     features:
       - title: Zero-touch enrollment
-        text: "On domain-joined machines, agents enroll automatically using their Kerberos ticket — no tokens, no manual steps. For machines outside a domain, a short-lived one-time token generated from the web UI is used instead. Either way, mTLS certificates are exchanged automatically after the initial authentication and stored securely on the agent."
+        text: "On domain-joined machines, agents enroll automatically using their Kerberos ticket - no tokens, no manual steps. For machines outside a domain, a short-lived one-time token generated from the web UI is used instead. Either way, mTLS certificates are exchanged automatically after the initial authentication and stored securely on the agent."
         icon: laptop-globe
       - title: Real-time policy delivery
-        text: Policies reach every enrolled node the moment they are published. Persistent gRPC streams and delta sync keep bandwidth minimal and guarantee consistency — even across thousands of nodes or through network interruptions.
+        text: Policies reach every enrolled node the moment they are published. Persistent gRPC streams and delta sync keep bandwidth minimal and guarantee consistency - even across thousands of nodes or through network interruptions.
         icon: doc-sync
       - title: Compliance without complexity
-        text: Every policy change, authentication event, and enforcement action is recorded in a tamper-evident audit log. Built-in RBAC, LDAP/AD integration, and support for Kerberos and WebAuthn align access controls with your existing directory services — ready for compliance reviews out of the box.
+        text: Every policy change, authentication event, and enforcement action is recorded in a tamper-evident audit log. Built-in RBAC, LDAP/AD integration, and support for Kerberos and WebAuthn align access controls with your existing directory services - ready for compliance reviews out of the box.
         icon: plug-cloud
       - title: Simple to deploy and operate
-        text: A single server binary backed by PostgreSQL, and a single lightweight agent. No message queues, no sidecars, no external dependencies. Install from a native package, manage with systemd — from zero to your first enrolled node in minutes.
+        text: A single server binary backed by PostgreSQL, and a single lightweight agent. No message queues, no sidecars, no external dependencies. Install from a native package, manage with systemd - from zero to your first enrolled node in minutes.
         icon: mouse-globe
   section4:
     title: Supported policies
