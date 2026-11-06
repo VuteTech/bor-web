@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Policy Management for Linux Workstations with Bor - OpenFest 2026</title>
+  <meta name="description" content="OpenFest 2026 talk (Sofia, 7 November 2026): what Bor is, how it manages Linux desktops in real time, and what it can enforce today.">
+
+  <!-- Everything is local so the deck works without network at the venue. -->
+  <link rel="stylesheet" href="vendor/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="vendor/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="vendor/reveal.js/dist/theme/white.css">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+
+  <style>
+    /* ── Brand colours (same palette as the Bor console and bg1.png) ── */
+    :root {
+      --g-dark:   #0f2f24;
+      --g-forest: #1b4332;
+      --g-mid:    #2d6a4f;
+      --g-soft:   #52b788;
+      --g-pale:   #d8f3dc;
+      --g-white:  #f9f9f9;
+      --g-text:   #12261d;
+      --g-amber:  #b7791f;
+      --g-red:    #a4262c;
+      --font: 'Open Sans', 'Source Sans 3', 'Noto Sans', 'DejaVu Sans', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Mono', 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+    }
+
+    .reveal-viewport { background: var(--g-white); }
+    .reveal .slide-background { background: var(--g-white); }
+
+    /* ── Global text ── */
+    .reveal { font-family: var(--font); font-size: 26px; color: var(--g-text); }
+    .reveal .slides section { text-align: left; padding: 0 2.2em; box-sizing: border-box; }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 { font-family: var(--font); font-weight: 800; color: var(--g-forest); text-transform: none; letter-spacing: -.01em; }
+    .reveal h1 { font-size: 2.4em; }
+    .reveal h2 { font-size: 1.45em; border-bottom: 3px solid var(--g-forest); padding-bottom: .16em; margin-bottom: .5em; }
+    .reveal h2 em { font-size: .6em; font-weight: 400; color: var(--g-mid); font-style: normal; }
+    .reveal h3 { font-size: 1.02em; color: var(--g-mid); margin: .45em 0 .2em; }
+    .reveal p { margin: .3em 0; line-height: 1.4; }
+    .reveal strong { color: var(--g-forest); }
+    .reveal em { color: var(--g-mid); }
+    .reveal a { color: var(--g-mid); }
+    .reveal small, .reveal .small { font-size: .78em; color: var(--g-mid); }
+    .reveal .muted { color: #5b6b63; }
+    .reveal .tiny { font-size: .62em; color: #5b6b63; line-height: 1.35; }
+
+    /* ── Lists ── */
+    .reveal ul, .reveal ol { list-style: none; padding: 0; margin: 0; display: block; }
+    .reveal ul li, .reveal ol li { padding: .18em 0 .18em 1.25em; position: relative; font-size: .94em; line-height: 1.42; }
+    .reveal ul li::before { content: "▸"; position: absolute; left: 0; top: .2em; color: var(--g-forest); font-size: .8em; }
+    .reveal ul ul li::before { content: "◦"; color: var(--g-soft); }
+    .reveal ol { counter-reset: step; }
+    .reveal ol li { padding-left: 1.7em; }
+    .reveal ol li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: .32em; width: 1.25em; height: 1.25em; border-radius: 50%; background: var(--g-forest); color: #fff; font-size: .7em; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .reveal ul.plain li::before { content: none; }
+    .reveal ul.plain li { padding-left: 0; }
+    .reveal ul li.done::before { content: "✓"; color: var(--g-soft); font-weight: 800; }
+    .reveal ul li.plan::before { content: "○"; color: var(--g-mid); }
+    .reveal ul li.ask::before { content: "?"; color: var(--g-amber); font-weight: 800; }
+    .reveal ul.tight li { padding-top: .1em; padding-bottom: .1em; }
+
+    /* ── Code ── */
+    .reveal pre { width: 100%; box-shadow: 0 0 0 2px rgba(27,67,50,.22); border-radius: 6px; margin: .4em 0; font-family: var(--mono); font-size: .68em; }
+    .reveal pre code { max-height: 580px; font-size: 1em; line-height: 1.42; padding: .7em .9em; background: #fff; color: var(--g-dark); font-family: var(--mono); }
+    .reveal pre.compact { font-size: .6em; }
+    .reveal p code, .reveal li code, .reveal td code, .reveal .card code { background: var(--g-pale); color: var(--g-dark); border-radius: 3px; padding: .02em .32em; font-size: .86em; font-family: var(--mono); }
+    .reveal .paths { font-family: var(--mono); font-size: .66em; line-height: 1.55; color: var(--g-dark); background: rgba(27,67,50,.06); border: 1px solid rgba(27,67,50,.2); border-radius: 6px; padding: .6em .9em; white-space: pre; }
+    .reveal .paths b { color: var(--g-forest); font-weight: 700; }
+
+    /* ── Table ── */
+    .reveal table { font-size: .74em; width: 100%; border-collapse: collapse; margin: .3em 0; }
+    .reveal table th { color: #fff; background: var(--g-forest); padding: .32em .55em; text-align: left; font-weight: 700; }
+    .reveal table td { padding: .3em .55em; border-bottom: 1px solid rgba(27,67,50,.15); vertical-align: top; }
+    .reveal table tr:nth-child(even) td { background: rgba(216,243,220,.55); }
+
+    /* ── Callout boxes ── */
+    .callout { border-left: 4px solid var(--g-forest); padding: .45em .85em; background: var(--g-pale); border-radius: 0 6px 6px 0; font-size: .86em; margin: .45em 0; color: var(--g-dark); line-height: 1.4; }
+    .callout.mint  { border-color: var(--g-soft); background: rgba(82,183,136,.12); }
+    .callout.amber { border-color: var(--g-amber); background: rgba(183,121,31,.10); }
+    .callout.white { background: rgba(255,255,255,.85); }
+
+    /* ── Columns ── */
+    .cols { display: flex; gap: 1.5em; align-items: flex-start; }
+    .col  { flex: 1; min-width: 0; }
+    .col.narrow { flex: 0 0 36%; }
+    .col.wide { flex: 0 0 60%; }
+    .col.half { flex: 0 0 48%; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; padding: .08em .55em; border-radius: 4px; font-size: .62em; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-right: .3em; vertical-align: middle; }
+    .b-forest { background: var(--g-forest); color: #fff; }
+    .b-soft   { background: var(--g-soft);   color: #fff; }
+    .b-pale   { background: var(--g-pale);   color: var(--g-dark); border: 1px solid var(--g-soft); }
+    .b-amber  { background: var(--g-amber);  color: #fff; }
+    .b-grey   { background: #e6e8e7; color: #3f4b46; }
+    .b-new    { background: var(--g-amber); color: #fff; font-size: .5em; padding: .05em .4em; margin-left: .4em; }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8em; margin-top: .4em; }
+    .cards.four { grid-template-columns: repeat(4, 1fr); }
+    .cards.three { grid-template-columns: repeat(3, 1fr); }
+    .card { background: rgba(255,255,255,.88); border: 2px solid rgba(27,67,50,.25); border-radius: 10px; padding: .6em .8em; font-size: .8em; line-height: 1.38; }
+    .card h4 { font-size: 1.05em; margin: 0 0 .25em; color: var(--g-forest); }
+    .card .k { display: block; font-size: .78em; color: var(--g-mid); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .15em; }
+    .card.accent { border-color: var(--g-forest); background: var(--g-pale); }
+    .card ul li { font-size: .95em; padding-top: .08em; padding-bottom: .08em; }
+
+    /* ── Big statement / numbers ── */
+    .big { font-size: 2.6em; font-weight: 800; color: var(--g-forest); line-height: 1.1; letter-spacing: -.02em; margin: .15em 0; }
+    .huge { font-size: 4.4em; font-weight: 800; color: var(--g-forest); line-height: 1; letter-spacing: -.03em; margin: 0; }
+    .stat { display: flex; gap: 1.1em; align-items: baseline; margin: .35em 0; }
+    .stat .n { font-size: 2em; font-weight: 800; color: var(--g-forest); min-width: 3.2em; text-align: right; line-height: 1.05; letter-spacing: -.02em; }
+    .stat .t { font-size: .9em; line-height: 1.35; }
+    .stat .t small { display: block; font-size: .72em; color: #5b6b63; }
+    .quote { font-size: 1.55em; font-weight: 700; color: var(--g-forest); line-height: 1.3; border-left: 6px solid var(--g-soft); padding-left: .6em; margin: .4em 0 .6em; }
+    .quote .who { display: block; font-size: .55em; font-weight: 400; color: var(--g-mid); margin-top: .4em; }
+
+    /* ── Policy type grid ── */
+    .tgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45em .6em; margin: .25em 0 .5em; }
+    .tcat { grid-column: 1 / -1; font-size: .72em; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--g-mid); margin-top: .35em; border-bottom: 1px solid rgba(27,67,50,.2); padding-bottom: .1em; }
+    .tchip { display: flex; align-items: center; gap: .5em; background: rgba(255,255,255,.9); border: 1.5px solid rgba(27,67,50,.25); border-radius: 8px; padding: .32em .55em; font-size: .78em; line-height: 1.2; }
+    .ticon { flex: 0 0 auto; width: 1.35em; height: 1.35em; display: inline-block; background: var(--g-forest); -webkit-mask: var(--i) no-repeat center / contain; mask: var(--i) no-repeat center / contain; }
+    .tchip b { display: block; color: var(--g-forest); font-weight: 700; }
+    .tchip small { display: block; font-size: .78em; color: #5b6b63; }
+    .ticon.big { width: 1.3em; height: 1.3em; flex: 0 0 auto; }
+    .reveal h3.ih, .reveal .card h4.ih { display: flex; align-items: center; gap: .45em; }
+
+    /* ── Flow / steps ── */
+    .flow { display: flex; align-items: stretch; gap: .35em; margin: .5em 0; }
+    .flow .step { flex: 1; background: rgba(255,255,255,.9); border: 2px solid rgba(27,67,50,.25); border-radius: 8px; padding: .5em .6em; font-size: .72em; line-height: 1.32; position: relative; }
+    .flow .step .n { display: inline-block; background: var(--g-forest); color: #fff; border-radius: 50%; width: 1.5em; height: 1.5em; line-height: 1.5em; text-align: center; font-weight: 800; font-size: .9em; margin-bottom: .3em; }
+    .flow .step.hot { border-color: var(--g-red); background: rgba(164,38,44,.06); }
+    .flow .step.hot .n { background: var(--g-red); }
+    .flow .step.good { border-color: var(--g-soft); background: rgba(82,183,136,.12); }
+    .flow .step.good .n { background: var(--g-mid); }
+    .flow .arr { align-self: center; color: var(--g-mid); font-weight: 800; font-size: 1.1em; }
+    .lifecycle { display: flex; align-items: center; gap: .5em; margin: .3em 0 .6em; font-size: .85em; }
+    .lifecycle .st { background: #fff; border: 2px solid var(--g-forest); border-radius: 999px; padding: .15em .9em; font-weight: 700; color: var(--g-forest); }
+    .lifecycle .st.live { background: var(--g-forest); color: #fff; }
+    .lifecycle .st.grey { border-color: #9aa5a0; color: #5b6b63; }
+    .lifecycle .arr { color: var(--g-mid); font-weight: 800; }
+
+    /* ── Sequence (agent / server) ── */
+    .seq { font-size: .78em; width: 100%; border-collapse: collapse; }
+    .seq th { background: transparent; color: var(--g-forest); border-bottom: 2px solid var(--g-forest); font-weight: 800; padding: .2em .4em; }
+    .seq td { padding: .22em .4em; border-bottom: 1px dashed rgba(27,67,50,.2); }
+    .seq tr:nth-child(even) td { background: transparent; }
+    .seq td.dir { text-align: center; font-family: var(--mono); color: var(--g-mid); font-weight: 700; width: 5.5em; }
+    .seq td.ev { color: var(--g-amber); font-weight: 700; }
+
+    /* ── Diagram (inline SVG) ── */
+    .arch { width: 100%; height: auto; display: block; margin: .2em 0; }
+    .arch text { font-family: var(--font); fill: var(--g-text); }
+    .arch .box { fill: #fff; stroke: var(--g-forest); stroke-width: 2.5; rx: 10; }
+    .arch .box.dark { fill: var(--g-forest); }
+    .arch .box.pale { fill: var(--g-pale); stroke: var(--g-mid); }
+    .arch .t { font-weight: 800; fill: var(--g-forest); }
+    .arch .t.w { fill: #fff; }
+    .arch .s { font-size: 15px; fill: var(--g-text); }
+    .arch .s.w { fill: #d8f3dc; }
+    .arch .ln { stroke: var(--g-mid); stroke-width: 2.5; fill: none; }
+    .arch .lb { font-size: 14px; fill: var(--g-mid); font-weight: 700; }
+
+    /* ── Images ── */
+    .shot { border-radius: 8px; box-shadow: 0 6px 24px rgba(15,47,36,.25); border: 1px solid rgba(27,67,50,.2); max-width: 100%; }
+    .reveal img { margin: 0; }
+
+    /* ── Title / section / closing slides ── */
+    /* The background has a dark diagonal from the top-left corner to the bottom at ~64% width,
+       so title content lives in the white top-right area. */
+    .slide-title { text-align: left !important; padding: 0 !important; }
+    .slide-title .inner { padding: 1.2em 1.6em 0 0; margin-left: 36%; width: 60%; box-sizing: border-box; }
+    .slide-title h1 { font-size: 2.1em; color: var(--g-forest); margin: 0 0 .3em; letter-spacing: -.02em; line-height: 1.12; }
+    .slide-title .subtitle { font-size: .98em; color: var(--g-mid); margin: 0 0 .9em; font-weight: 600; line-height: 1.35; }
+    .slide-title .meta { font-size: .7em; color: var(--g-dark); border-top: 1px solid rgba(27,67,50,.2); padding-top: .7em; margin-top: .3em; line-height: 1.6; }
+    .slide-title .meta b { color: var(--g-forest); }
+    .slide-title.centered { text-align: center !important; }
+    .slide-title.centered .inner { margin: 0 auto; width: 70%; padding: 2.4em 0 0; }
+
+    .slide-section { text-align: left !important; }
+    .slide-section .num { font-size: 1.3em; font-weight: 700; color: var(--g-soft); line-height: 1; letter-spacing: .28em; text-transform: uppercase; margin-bottom: .6em; }
+    .slide-section h1 { color: #fff; font-size: 2.6em; margin: .1em 0 .25em; }
+    .slide-section p { color: var(--g-pale); font-size: 1.05em; line-height: 1.4; max-width: 85%; }
+    .slide-section p em { color: #fff; font-style: italic; }
+
+    .slide-cta { text-align: center !important; padding: 0 !important; }
+    .slide-cta .inner { margin-left: 31%; width: 67%; padding: 1.3em 1em 0 0; box-sizing: border-box; }
+    .slide-cta h2 { border: none !important; font-size: 1.6em; margin-bottom: .3em; }
+    .cta-link { display: block; font-size: .95em; color: var(--g-forest); margin: .28em 0; font-weight: 700; text-decoration: none; }
+    .cta-boxes { display: flex; gap: .7em; justify-content: center; margin-top: .9em; flex-wrap: wrap; }
+    .cta-box { background: var(--g-pale); border: 2px solid var(--g-forest); border-radius: 8px; padding: .6em 1em; width: 215px; font-size: .78em; color: var(--g-dark); text-align: left; line-height: 1.35; }
+    .cta-box strong { color: var(--g-forest); display: block; margin-bottom: .25em; }
+
+    .avatar-row { display: flex; align-items: center; gap: 1.1em; margin-bottom: .7em; }
+    .avatar-circle { width: 70px; height: 70px; border-radius: 50%; background: var(--g-forest); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar-circle img { width: 48px; height: 48px; }
+    .vute-badge { display: block; background: #fff; border: 1px solid rgba(27,67,50,.2); border-radius: 10px; padding: .35em .8em; }
+    .vute-badge img { height: 60px; width: auto; display: block; }
+    .vute-inline { height: 1.35em; width: auto; vertical-align: middle; margin-left: .35em; position: relative; top: -.06em; }
+
+    /* reveal controls in brand colour */
+    .reveal .controls { color: var(--g-mid); }
+    .reveal .progress { color: var(--g-soft); height: 4px; }
+    .reveal .slide-number { background: transparent; color: var(--g-mid); font-family: var(--font); font-size: 14px; right: 74px; bottom: 14px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════════════════════════════ TITLE ════════════════════════════════ -->
+<section class="slide-title" data-background-image="img/bg1.png" data-background-size="100% 100%" data-background-opacity="1">
+  <div class="inner">
+    <h1>Policy Management for Linux Workstations with Bor</h1>
+    <p class="subtitle">Open source, self-hosted, real-time.</p>
+    <p class="meta">
+      <b>Blagovest Petrov</b> &nbsp;·&nbsp; Founder, <a href="https://vute.tech" style="color:var(--g-forest); font-weight:700;">Vute.Tech</a>
+      <img src="img/vute.svg" alt="" class="vute-inline" style="height:1.7em;"><br>
+      <a href="https://www.openfest.org/2026/" style="color:var(--g-forest); font-weight:700;">OpenFest 2026</a>
+      &nbsp;·&nbsp; 7 November &nbsp;·&nbsp; Interpred WTC, Sofia &nbsp;·&nbsp; hall "Varna"
+    </p>
+  </div>
+  <aside class="notes">
+    [0:00] Поздрав. Едно изречение: „Днес ще говорим за това как се управляват Linux работни станции, защо досега беше толкова трудно и какво направихме по въпроса.“ Слайдовете са на английски, за да могат да се ползват и след доклада; говоря на български.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ WHO AM I ════════════════════════════════ -->
+<section>
+  <h2>Who am I?</h2>
+  <div class="avatar-row">
+    <div class="avatar-circle"><img src="img/logo-white.svg" alt=""></div>
+    <div style="flex:1;">
+      <p style="margin:0; font-size:1.1em; font-weight:800; color:var(--g-forest)">Blagovest Petrov</p>
+      <p style="margin:.1em 0 0; color:var(--g-mid); font-size:.85em;">Founder of <strong>Vute.Tech</strong> &nbsp;·&nbsp; DevOps / Platform Engineering</p>
+    </div>
+    <a href="https://vute.tech" class="vute-badge"><img src="img/vute.svg" alt="Vute.Tech"></a>
+  </div>
+  <ul>
+    <li>Many years of Linux in corporate environments: servers, infrastructure, automation</li>
+    <li>Long-time free software user and OpenFest regular</li>
+  </ul>
+  <div class="callout mint" style="margin-top:1em;">
+    blago.petrov@vute.tech &nbsp;·&nbsp; <a href="https://vute.tech">vute.tech</a> &nbsp;·&nbsp; <a href="https://getbor.dev">getbor.dev</a>
+  </div>
+  <aside class="notes">
+    [0:30, ~45 сек] Кратко: кой съм, какво правя, защо ме интересува темата. Без дълга биография.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ POLL ════════════════════════════════ -->
+<section>
+  <h2>Quick poll <em>(hands up)</em></h2>
+  <ul style="font-size:1.12em; margin-top:.4em;">
+    <li class="fragment">Who manages Linux <strong>workstations</strong>, not just servers?</li>
+    <li class="fragment">More than 10? &nbsp; More than 100?</li>
+    <li class="fragment">With Ansible, Puppet or Salt?</li>
+    <li class="fragment">With shell scripts and cron?</li>
+    <li class="fragment">By hand, over SSH, when somebody complains?</li>
+    <li class="fragment"><em>Nobody? Not even your grandma's laptop?</em></li>
+  </ul>
+  <div class="callout fragment" style="margin-top:1.2em; font-size:1em;">
+    Remember which hand you raised. We will come back to it before the demo.
+  </div>
+  <aside class="notes">
+    [1:30, ~1.5 мин] Интерактивен момент. Пребройте на глас. Ако никой не вдигне ръка: „Дори машината на баба ви?“ Всеки, който поддържа компютъра на роднина, управлява Linux работна станция, просто без инструменти. Използвайте резултата, за да калибрирате: ако залата е пълна с админи на работни станции, по-малко „защо“, повече „как“.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SECTION 1 ════════════════════════════════ -->
+<section class="slide-section" data-background-color="#1b4332">
+  <div class="num">Chapter 01</div>
+  <h1>The problem</h1>
+  <p>2027 is the year of the Linux desktop. <em>(Yes, really?)</em><br>But are we ready to welcome it?</p>
+  <aside class="notes">
+    [2:45] Шега с „годината на Linux десктопа“: предсказва се от 1999 г. насам (Dirk Hohndel, Intel). Този път аргументът е различен: не ентусиазъм, а край на Windows 10 и суверенитет. Въпросът на главата: готови ли сме да го управляваме, когато дойде.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ WHY NOW ════════════════════════════════ -->
+<section>
+  <h2>Why now</h2>
+  <div class="cols">
+    <div class="col">
+      <p class="huge" style="font-size:3.2em;">14.10.2025</p>
+      <p style="font-weight:700; color:var(--g-forest); margin-top:0;">Windows 10 reached end of support.</p>
+      <div class="stat"><div class="n">~240M</div><div class="t">PCs that cannot run Windows 11<small>Canalys estimate, Dec 2023: working hardware, expired software</small></div></div>
+      <div class="stat"><div class="n">28%</div><div class="t">of Windows desktops still on Windows 10, one year later<small>StatCounter, September 2026</small></div></div>
+      <div class="stat"><div class="n">~6%</div><div class="t">Linux desktop share in Bulgaria, above the world's 4.5%<small>StatCounter, September 2026; small sample, noisy</small></div></div>
+    </div>
+    <div class="col">
+      <h3 style="margin-top:0;">Public sector moving to Linux desktops</h3>
+      <ul class="tight">
+        <li><strong>Schleswig-Holstein</strong>: "Linux+1" programme for ~30 000 workstations; the State Chancellery runs on Linux since September 2026</li>
+        <li><strong>Lyon</strong>: 4 000+ workstations from Windows and Office to Linux and OnlyOffice</li>
+        <li><strong>France, DINUM</strong>: its own workstations to Linux; every ministry files a roadmap off non-European dependencies by autumn 2026</li>
+        <li><strong>Netherlands</strong>: a NixOS-based government workplace, eight municipalities piloting in 2026</li>
+        <li><strong>Gendarmerie Nationale</strong>: ~70 000 Linux desktops, quietly, since 2008</li>
+      </ul>
+      <div class="callout fragment" style="margin-top:.5em;">
+        The motive is no longer "it's free". The motive is <strong>control</strong>: of data, of cost, of vendor dependency. Control needs management.
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [3:00, ~1.5 мин] Куката. Датата е голяма сама по себе си. Не четете всички точки: Шлезвиг-Холщайн (мащаб) и DINUM (скорост, април 2026) са достатъчни. Поантата е в зеленото каре: мотивът е контрол, а контролът изисква управление.
+    Източници за въпроси: Canalys, дек. 2023 (240 млн. компютъра, ~480 млн. кг е-отпадък); StatCounter септ. 2026: Windows 10 = 27.8% от Windows десктоп трафика; Linux десктоп 4.54% свят, 4.61% Европа, 5.96% България (малка извадка, шумно: от 2.4% до 13.5% през годината). Шлезвиг-Холщайн: schleswig-holstein.de/linux-plus1, канцеларията на Linux от 19.09.2026, ~15 млн. евро/год. спестени от лицензи. Лион: The Register 26.06.2025, 300-350 машини/месец. DINUM: IT-Connect / Acteurs Publics, април 2026 (120 Linux машини в DINUM, 2.5 млн. служители са „обхват“, не ангажимент). Нидерландия DAWO: The Register 28.09.2026. Жандармерия: ~70 000 по данни на DINUM. Ако попитат за Дания и Австрия: там смяната е само на офис пакета (LibreOffice), не на ОС. Ако попитат за Мюнхен: LiMux 15 000 машини, връщане към Windows 2017, Accenture: проблемите са организационни; през 2024 градът направи OSPO.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ THE AWKWARD QUESTION ════════════════════════════════ -->
+<section>
+  <h2>The awkward question</h2>
+  <p class="quote">"Great, we're moving to Linux!<br>... so how do we manage all these machines?"<span class="who">every IT director, about a week after the decision</span></p>
+  <ul>
+    <li>This question keeps organisations on Windows <strong>more</strong> than application compatibility does.</li>
+    <li>The usual answer: "we'll figure something out". A script, a cron job, and one person who knows how it works.</li>
+    <li>Without a convincing answer, the migration stops right there, in the meeting room.</li>
+  </ul>
+  <aside class="notes">
+    [4:30, ~1 мин] Един пример от практиката е достатъчен („смяна на прокси настройка на 60 машини = 60 ssh сесии“). Поантата: въпросът е организационен, не технически, и затова спира проекти.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ MECHANISMS, NO MANAGEMENT PLANE ════════════════════════════════ -->
+<section>
+  <h2>Linux has the mechanisms. It lacks the management plane.</h2>
+  <div class="cols">
+    <div class="col narrow">
+      <ul>
+        <li>Every major desktop application has an <strong>official, admin-locked</strong> configuration mechanism</li>
+        <li>Each one is a different file format in a different place</li>
+        <li>Nothing distributes them, watches them, or reports whether they are actually in effect</li>
+        <li>Windows admins have had one model for this since 2000: Group Policy</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="paths"><b>/etc/firefox/policies/policies.json</b>
+<b>/etc/opt/chrome/policies/managed/</b>*.json
+<b>/etc/xdg/kdeglobals</b>           [KDE Action Restrictions]
+<b>/etc/dconf/db/local.d/</b>*  +  <b>locks/</b>
+<b>/etc/polkit-1/rules.d/</b>*.rules
+<b>/etc/firewalld/zones/</b>*.xml
+<b>/etc/security/time.conf</b>        (pam_time)
+<b>/etc/apt/sources.list.d/</b>*.sources   /etc/yum.repos.d/
+<b>/etc/systemd/system/</b>*.d/*.conf
+<b>/etc/selinux/</b>   <b>/etc/apparmor.d/</b>
+<b>/etc/crypttab</b>  +  clevis / systemd-cryptenroll
+<b>/var/lib/flatpak/repo/config</b>  +  flatpak remotes</div>
+      <div class="callout amber fragment" style="margin-top:.5em;">
+        All documented. None of it centralised. Twelve formats, twelve places, zero feedback.
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [5:30, ~1.5 мин] Ключов слайд за „защо“. Linux НЕ е без механизми: всяко приложение има официален, администраторски, заключващ механизъм. Проблемът е, че са дузина различни формата на дузина места и нищо не ги държи заедно, не следи дали са там и не докладва. Точно този слой е Bor.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SECTION 2 ════════════════════════════════ -->
+<section class="slide-section" data-background-color="#1b4332">
+  <div class="num">Chapter 02</div>
+  <h1>Bor</h1>
+  <p>What it is and how it works.</p>
+</section>
+
+<!-- ════════════════════════════════ WHAT IS BOR ════════════════════════════════ -->
+<section>
+  <h2>What is Bor?</h2>
+  <p class="big" style="font-size:1.6em; margin-bottom:.4em;">Policy management for Linux desktops. Think Group Policy, built Linux-first.</p>
+  <div class="cards four">
+    <div class="card fragment"><span class="k">Console</span><h4>Central web console</h4>Policies, node groups, bindings, RBAC, audit log. PatternFly 6, WCAG 2.2 AA, dark mode.</div>
+    <div class="card fragment"><span class="k">Agent</span><h4>Lightweight agent</h4>Go, one static binary, a systemd service. Listens on no port; only dials out.</div>
+    <div class="card fragment"><span class="k">Delivery</span><h4>Real-time</h4>Persistent gRPC stream over mTLS. A released policy lands on every node in seconds.</div>
+    <div class="card fragment"><span class="k">Enforcement</span><h4>Continuous</h4>Writes the native config, watches it, restores it if touched, reports compliance.</div>
+  </div>
+  <p class="fragment" style="margin-top:1em;">
+    <span class="badge b-forest">Linux-first</span><span class="badge b-soft">Self-hosted</span><span class="badge b-pale">Open source · AGPL-3.0</span><span class="badge b-pale">Air-gapped capable</span>
+  </p>
+  <p class="fragment" style="margin-top:.6em; font-size:.95em;">"For me, Bor is the one that comes closest to Windows GPOs, and the one with the most potential." <span class="muted small">Karl Certa, syspirit.fr, 6 August 2026</span></p>
+  <aside class="notes">
+    [7:00, ~1.5 мин] Едно изречение, което залата да запомни: „Group Policy за Linux десктопи“. Четирите карти са четирите неща, които всеки такъв инструмент трябва да прави. Цитатът е от независим преглед (Karl Certa, syspirit.fr, 6 авг. 2026), който сравнява Ansible, Puppet, Samba GPO, ADSys и FreeIPA и отбелязва и слабостите: без auto-update на агента, без ADMX-подобна библиотека, един поддържащ. Анекдот за въпросите: авторът на Samba GPO (David Mulder, SUSE) отговори на аргумента „няма стандартен слой за политики“ с XKCD 927 „Standards“.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ WHAT BOR IS NOT ════════════════════════════════ -->
+<section>
+  <h2>What Bor is <em style="font-size:1em; font-weight:800; color:var(--g-forest); font-style:italic;">not</em></h2>
+  <ul style="font-size:1.05em;">
+    <li class="fragment"><strong>A directory.</strong> It does not replace FreeIPA, Samba AD or LDAP. It integrates with them: sign-in, groups, Kerberos.</li>
+    <li class="fragment"><strong>Configuration management.</strong> It is not Ansible, Puppet or Salt. They prepare the machine; Bor keeps it in line every day after that.</li>
+    <li class="fragment"><strong>A provisioning tool.</strong> It does not install operating systems or manage their lifecycle.</li>
+    <li class="fragment"><strong>A scripting engine.</strong> A policy is a typed, declarative document with a schema, never code. There is no "run this on every machine".</li>
+  </ul>
+  <div class="callout mint fragment" style="margin-top:1em;">
+    Bor is the policy layer that sits <em>beside</em> those tools: Ansible installs the agent, Bor takes it from there.
+  </div>
+  <aside class="notes">
+    [8:30, ~1 мин] Четвъртата точка е важна за публиката на OpenFest: Bor нарочно не може да изпълнява произволни команди. Това е ограничение по дизайн: по-малка повърхност за атака, одитируем документ вместо playbook. Изключението са планираните задачи в systemd типа, които са зад отделна permission.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ WHY "BOR" ════════════════════════════════ -->
+<section>
+  <h2>Why "Bor"?</h2>
+  <div class="cols">
+    <div class="col narrow" style="text-align:center;">
+      <img src="img/logo.svg" alt="The Bor logo: a stylised tree in a circle" style="width:230px; margin-top:.6em;">
+    </div>
+    <div class="col">
+      <p style="margin-top:.5em; font-size:1.05em;"><strong>Бор.</strong> „Прекрасно българско трибуквие.“ <span class="small">The Slavic word for <em>pine</em>.</span></p>
+      <ul style="font-size:1.08em;">
+        <li>Evergreen.</li>
+        <li>Grows where little else does: on rock, on sand, in the wind.</li>
+        <li>Needs little. Lives long.</li>
+        <li>Has branches.</li>
+        <li>A Slavic word anyone in the world can pronounce.</li>
+      </ul>
+      <p class="small" style="margin-top:.8em;">Search for <code>getbor.dev</code>. Searching for "бор" alone gets you lumber prices.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    [9:30, ~30 сек] Лек момент преди техническата част. „Прекрасно българско трибуквие“ е за усмивка на залата; „has branches“ е за програмистите (git) и за логото. Пропуснете, ако сте назад с времето.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ CONSOLE ════════════════════════════════ -->
+<section>
+  <h2>The console at a glance</h2>
+  <div class="cols">
+    <div class="col wide">
+      <img class="shot" src="img/dashboard.png" alt="The Bor 0.10.0 dashboard: total, online, offline and unknown nodes, agent versions, OS distribution, desktop environments, groups and unassigned nodes" style="width:100%;">
+    </div>
+    <div class="col">
+      <ul class="tight" style="font-size:.9em;">
+        <li><strong>Fleet</strong>: nodes, node groups, compliance, disk encryption</li>
+        <li><strong>Policy</strong>: policies, bindings, import and export</li>
+        <li><strong>System</strong>: audit logs, users, groups, roles, settings</li>
+        <li>Dashboard: online / offline / unknown, agent versions, distributions, desktop environments, policies by state and type</li>
+        <li>Server-side pagination, filtering and sorting; deep links for every page</li>
+        <li>Light, dark and high-contrast themes</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    [9:00, ~45 сек] Ориентир за навигацията: Fleet, Policy, System. Ще я видим на живо в демото.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ ARCHITECTURE ════════════════════════════════ -->
+<section>
+  <h2>Architecture</h2>
+  <svg class="arch" viewBox="0 0 1160 470" role="img" aria-label="Bor architecture: administrator, server, PostgreSQL and agents">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2d6a4f"/></marker>
+    </defs>
+    <rect class="box pale" x="20" y="60" width="200" height="110"/>
+    <text class="t" x="120" y="100" text-anchor="middle" font-size="22">Administrator</text>
+    <text class="s" x="120" y="128" text-anchor="middle">browser · REST API</text>
+    <text class="s" x="120" y="150" text-anchor="middle">YAML import / export</text>
+
+    <rect class="box dark" x="330" y="30" width="500" height="200"/>
+    <text class="t w" x="580" y="66" text-anchor="middle" font-size="24">Bor Server (Go, one binary)</text>
+    <text class="s w" x="355" y="100">▸ REST API + embedded web console (PatternFly 6)</text>
+    <text class="s w" x="355" y="126">▸ gRPC: enrollment (:8443) and policy stream (:8444, mTLS)</text>
+    <text class="s w" x="355" y="152">▸ Internal CA (ECDSA P-384) · optional PKCS#11 HSM</text>
+    <text class="s w" x="355" y="178">▸ PolicyHub: pub/sub to every connected agent</text>
+    <text class="s w" x="355" y="204">▸ RBAC · MFA · audit · Prometheus metrics</text>
+
+    <rect class="box pale" x="930" y="60" width="210" height="140"/>
+    <text class="t" x="1035" y="98" text-anchor="middle" font-size="22">PostgreSQL</text>
+    <text class="s" x="1035" y="126" text-anchor="middle">policies · nodes · groups</text>
+    <text class="s" x="1035" y="148" text-anchor="middle">bindings · RBAC · audit</text>
+    <text class="s" x="1035" y="170" text-anchor="middle">compliance · escrowed keys</text>
+
+    <line class="ln" x1="220" y1="115" x2="330" y2="115" marker-end="url(#ah)" marker-start="url(#ah)"/>
+    <text class="lb" x="275" y="104" text-anchor="middle">HTTPS :8443</text>
+    <line class="ln" x1="830" y1="130" x2="930" y2="130" marker-end="url(#ah)" marker-start="url(#ah)"/>
+
+    <g>
+      <rect class="box" x="130" y="330" width="260" height="120"/>
+      <text class="t" x="260" y="362" text-anchor="middle" font-size="20">Bor Agent</text>
+      <text class="s" x="260" y="388" text-anchor="middle">Go · root · systemd · no ports</text>
+      <text class="s" x="260" y="412" text-anchor="middle">Firefox · dconf · polkit · firewalld</text>
+      <text class="s" x="260" y="434" text-anchor="middle">inotify watcher · compliance</text>
+    </g>
+    <g>
+      <rect class="box" x="450" y="330" width="260" height="120"/>
+      <text class="t" x="580" y="362" text-anchor="middle" font-size="20">Bor Agent</text>
+      <text class="s" x="580" y="388" text-anchor="middle">KDE Plasma · Fedora Kinoite</text>
+      <text class="s" x="580" y="412" text-anchor="middle">Kconfig · Flatpak · LUKS</text>
+      <text class="s" x="580" y="434" text-anchor="middle">desktop notifications</text>
+    </g>
+    <g>
+      <rect class="box" x="770" y="330" width="260" height="120"/>
+      <text class="t" x="900" y="362" text-anchor="middle" font-size="20">Bor Agent</text>
+      <text class="s" x="900" y="388" text-anchor="middle">Ubuntu · AppArmor</text>
+      <text class="s" x="900" y="412" text-anchor="middle">updates · systemd · packages</text>
+      <text class="s" x="900" y="434" text-anchor="middle">Kerberos enrollment</text>
+    </g>
+    <line class="ln" x1="260" y1="330" x2="460" y2="230" marker-end="url(#ah)" marker-start="url(#ah)"/>
+    <line class="ln" x1="580" y1="330" x2="580" y2="230" marker-end="url(#ah)" marker-start="url(#ah)"/>
+    <line class="ln" x1="900" y1="330" x2="700" y2="230" marker-end="url(#ah)" marker-start="url(#ah)"/>
+    <text class="lb" x="580" y="290" text-anchor="middle">gRPC stream · TLS 1.3 · mTLS · :8444</text>
+    <text class="lb" x="580" y="312" text-anchor="middle">the agent always dials out</text>
+  </svg>
+  <aside class="notes">
+    [9:45, ~1.5 мин] Три неща: (1) един сървърен binary + PostgreSQL, без опашки и sidecar-и; (2) два порта с различна сигурност: 8443 за хора и за първата регистрация (клиентски сертификат по избор), 8444 само за агенти със задължителен mTLS; (3) агентът набира навън и не слуша никъде: добре за лаптопи зад NAT и за firewall-а.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ ENROLLMENT ════════════════════════════════ -->
+<section>
+  <h2>Enrolling a machine</h2>
+  <div class="cols">
+    <div class="col">
+      <ol>
+        <li>An admin generates a <strong>one-time token</strong> in the console: 256-bit, 5-minute TTL, single use, only its hash is stored. <em>Or</em> the machine is domain-joined and has a Kerberos ticket.</li>
+        <li><code>bor-agent --token ...</code>: the agent generates an <strong>ECDSA P-256</strong> key locally and a CSR.</li>
+        <li>Enroll RPC over TLS: token (or Kerberos) + CSR.</li>
+        <li>The server validates, signs with the internal CA and creates the node in the token's group.</li>
+        <li>Certificate and CA are stored in <code>/var/lib/bor/agent</code>. From here on: <strong>mTLS</strong>.</li>
+      </ol>
+    </div>
+    <div class="col narrow" style="font-size:.9em;">
+      <div class="callout mint">The private key <strong>never leaves the machine</strong>.</div>
+      <div class="callout">The token is bound to a node group: policies start flowing immediately.</div>
+      <div class="callout mint">Certificates live 90 days and <strong>renew themselves</strong>. Revocation is checked on every RPC.</div>
+      <div class="callout"><strong>Kerberos</strong>: no token at all. The machine keytab proves identity (AD, Samba AD, FreeIPA).</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [11:15, ~1.5 мин] Въпросът, който винаги идва: „trust on first use?“ Отговор: токенът е кратък, еднократен, хеширан; ключът се генерира локално; скриптът от Deploy wizard първо инсталира CA, така че агентът проверява сървъра. В домейн няма токен изобщо.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ REAL-TIME ════════════════════════════════ -->
+<section>
+  <h2>Policies arrive in seconds <em>(not at the next cron run)</em></h2>
+  <div class="cols">
+    <div class="col wide">
+      <table class="seq">
+        <tr><th style="width:38%">Agent</th><th></th><th>Server</th></tr>
+        <tr><td>connects with mTLS and states its last known revision</td><td class="dir">--&gt;</td><td><code>SubscribePolicyUpdates(rev)</code></td></tr>
+        <tr><td>receives a <strong>SNAPSHOT</strong> (new agent, or revision too old)</td><td class="dir">&lt;--</td><td>all current policies + end-of-snapshot marker</td></tr>
+        <tr><td>applies atomically, reports <strong>compliance</strong></td><td class="dir">--&gt;</td><td>stored per node and per policy</td></tr>
+        <tr><td colspan="3" style="text-align:center; color:var(--g-mid);">... the stream stays open ...</td></tr>
+        <tr><td></td><td class="dir"></td><td class="ev">an admin releases a policy or changes a binding</td></tr>
+        <tr><td>receives only the <strong>delta</strong>: CREATED / UPDATED / DELETED</td><td class="dir">&lt;--</td><td>PolicyHub broadcasts to every connected agent</td></tr>
+        <tr><td>applies, notifies the user, reports again</td><td class="dir">--&gt;</td><td>dashboard updates</td></tr>
+      </table>
+    </div>
+    <div class="col" style="font-size:.9em;">
+      <h3 style="margin-top:0;">PolicyHub</h3>
+      <ul><li>in-memory pub/sub, monotonic revision</li><li>1000-event ring buffer for deltas on reconnect; revision persisted in PostgreSQL</li></ul>
+      <h3>Offline?</h3>
+      <ul><li>the last config is a native file: Firefox reads it with or without the agent</li><li>reconnect with backoff, capped at 60 s</li></ul>
+      <h3>Conflicts</h3>
+      <ul><li>every binding has a <strong>priority</strong>; for the same key the higher one wins (Polkit is the exception: lower number, first match)</li></ul>
+    </div>
+  </div>
+  <aside class="notes">
+    [12:45, ~1.5 мин] Контрастът с „pull на 30 минути“: сървърът бута, агентът е винаги свързан, при прекъсване получава само разликата. Приоритетите решават „фирмена политика срещу изключение за разработчиците“.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ GROUPS, BINDINGS, PRECEDENCE ════════════════════════════════ -->
+<section>
+  <h2>Node groups, bindings and precedence</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li><strong>Node groups</strong> are many-to-many: a laptop can be in <em>Finance Desktops</em> and <em>Developers</em> at once</li>
+        <li><strong>Bindings</strong> link a released policy to a group, with an enabled flag and a <strong>priority</strong></li>
+        <li>Same-type policies merge by priority: the higher number wins per key (Polkit: the lower one, its rules file is read first)</li>
+        <li>Example: <em>USB storage block</em> at 50 for everyone, <em>Speaker USB exception</em> at 10 for one group</li>
+        <li>Membership changes reach connected agents at once; enrollment tokens are issued per group</li>
+        <li>Bindings carry an "affected nodes" count so you see the blast radius before you save</li>
+      </ul>
+    </div>
+    <div class="col">
+      <img class="shot" src="img/policy-bindings.png" alt="Policy bindings list with policy, state, group, priority, affected nodes" style="width:100%;">
+    </div>
+  </div>
+  <aside class="notes">
+    [14:15, ~1 мин] Моделът е същият като GPO към OU: политика към група, с приоритет. Примерът с USB устройствата е най-лесният за обяснение: забрана за всички, изключение за една група. Внимание: при Polkit печели по-малкият номер (файлът 010 се чете преди 050 и първото съвпадение решава), при Dconf и пакетите печели по-големият.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ LIFECYCLE AND EDITORS ════════════════════════════════ -->
+<section>
+  <h2>Policy lifecycle and editors</h2>
+  <div class="lifecycle">
+    <span class="st">Draft</span><span class="arr">&gt;</span><span class="st live">Released</span><span class="arr">&gt;</span><span class="st grey">Archived</span>
+    <span class="small" style="margin-left:.8em;">only released policies reach agents; released content is read-only, edit a new draft</span>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <ul class="tight">
+        <li><strong>Create wizard</strong>: type, details, configuration, review. Each type card explains what it manages on the node and what it is good for</li>
+        <li><strong>Typed editors</strong> per policy type: tree editors with setting previews, day-and-time builders, catalog search, no raw JSON unless you want it</li>
+        <li><strong>Proto-driven catalogues</strong>: Firefox, Thunderbird, Chrome and Edge settings are generated from protobuf annotations, one source of truth for server, agent and UI</li>
+        <li><strong>Safety rails</strong>: unsaved-changes guard, JSON validation for Chrome and Edge values, confirmation for destructive type changes, type-to-confirm deletes</li>
+        <li><strong>Import preview</strong>: see exactly what a YAML bundle will create before anything is written</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <img class="shot" src="img/policy-create-wizard.png" alt="The create-policy wizard, step one: choosing a type from the catalogue" style="width:100%;">
+    </div>
+  </div>
+  <aside class="notes">
+    [15:15, ~1 мин] Жизненият цикъл е прост нарочно. Редакторите са това, което отличава инструмента от „редактирай JSON на ръка“: за всеки тип има структуриран редактор, генериран от protobuf схемата.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ 16 POLICY TYPES ════════════════════════════════ -->
+<section>
+  <h2>16 policy types</h2>
+  <div class="tgrid">
+    <div class="tcat">Browsers &amp; mail</div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Firefox.svg)"></span><span><b>Firefox</b><small>ESR and Flatpak; policies.json</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Thunderbird.svg)"></span><span><b>Thunderbird</b><small>updates, privacy, security</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Chrome.svg)"></span><span><b>Chrome / Chromium</b><small>managed policies JSON</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Edge.svg)"></span><span><b>Microsoft Edge</b><small>Edge for Business on Linux</small></span></div>
+    <div class="tcat">Desktop environment</div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Kconfig.svg)"></span><span><b>KDE Plasma</b><small>Kconfig / Kiosk: restrictions, lockdown</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Dconf.svg)"></span><span><b>Dconf</b><small>GNOME and any GSettings desktop, locks</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/SessionAccess.svg)"></span><span><b>Session Access</b><small>when users and groups may use the desktop</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Flatpak.svg)"></span><span><b>Flatpak</b><small>remotes, apps, update settings, catalog</small></span></div>
+    <div class="tcat">System &amp; security</div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Polkit.svg)"></span><span><b>Polkit</b><small>who may run privileged actions</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Firewalld.svg)"></span><span><b>Firewall</b><small>firewalld zones, services, rich rules</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Package.svg)"></span><span><b>Package</b><small>repositories and packages: apt, dnf, zypper</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/DiskEncryption.svg)"></span><span><b>Disk encryption</b><span class="badge b-new">v0.10</span><small>LUKS2, TPM2, Tang, recovery keys</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Systemd.svg)"></span><span><b>Services &amp; timers</b><span class="badge b-new">v0.10</span><small>systemd units, timers, scheduled tasks</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/ShieldAlt.svg)"></span><span><b>SELinux</b><span class="badge b-new">v0.10</span><small>mode, booleans, exceptions, modules</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Fingerprint.svg)"></span><span><b>AppArmor</b><span class="badge b-new">v0.10</span><small>profile modes, user namespaces</small></span></div>
+    <div class="tchip"><span class="ticon" style="--i:url(img/types/Updates.svg)"></span><span><b>Software updates</b><span class="badge b-new">v0.10</span><small>unattended updates, schedule, the reboot</small></span></div>
+  </div>
+  <p class="tiny">Every type uses the application's <strong>official</strong> system-wide mechanism: no patched binaries, no LD_PRELOAD. The configuration keeps working even if the agent is stopped. Product marks belong to their respective owners.</p>
+  <aside class="notes">
+    [16:15, ~1 мин] Не изброявайте всичките. Принципът: Bor пише това, което upstream документира като администраторски механизъм, затова поведението е точно каквото пише в документацията на Firefox, KDE или dconf, а конфигурацията остава и без агент. Петте типа с „v0.10“ излязоха с v0.10.0 на 2 ноември; v0.10.1 от 5 ноември е patch (disk encryption на Fedora, keepalive след suspend, constrain в SELinux модулите). Следват детайли по групи.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ BROWSERS AND DESKTOPS ════════════════════════════════ -->
+<section>
+  <h2>Browsers, mail and desktop environments</h2>
+  <div class="cols">
+    <div class="col">
+      <h3 class="ih" style="margin-top:0;"><span class="ticon big" style="--i:url(img/types/Firefox.svg)"></span>Browsers and mail</h3>
+      <p class="small" style="margin:0 0 .2em;">Firefox, Thunderbird, Chrome / Chromium, Microsoft Edge</p>
+      <ul class="tight">
+        <li>Homepage, search, extensions (pinned, blocked, force-installed), DNS over HTTPS, privacy settings, password manager, update channel, certificates, proxies, popups</li>
+        <li>Firefox and Chromium <strong>Flatpak</strong> installs are covered too</li>
+        <li>Settings catalogue generated from the protobuf schema, with previews and validation</li>
+        <li>The same editor model across all four: one baseline, every browser</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 class="ih" style="margin-top:0;"><span class="ticon big" style="--i:url(img/types/Kconfig.svg)"></span>KDE Plasma (Kconfig / Kiosk)</h3>
+      <ul class="tight">
+        <li>Overlay under <code>/etc/xdg</code>, immutable keys, KDE Action Restrictions, System Settings module lockdown, look and feel, settings scoped per Unix group</li>
+      </ul>
+      <h3 class="ih"><span class="ticon big" style="--i:url(img/types/Dconf.svg)"></span>Dconf (GNOME and friends)</h3>
+      <ul class="tight">
+        <li>System database plus <strong>locks</strong> for any GSettings schema; a built-in key catalogue seeded on the server</li>
+        <li>Screen lock, idle, user switching, wallpaper, default apps, privacy settings</li>
+      </ul>
+      <p class="tiny" style="margin-top:.5em;">Works on X11 and Wayland alike: it is files, dconf and logind, not the display server.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    [17:15, ~1 мин] Браузърите са 80% от реалните искания на организациите: начална страница, разширения, DoH, парола мениджър. KDE Kiosk е по-богат по природа (ограничения на действия и на System Settings модули); GNOME се покрива през dconf ключове и locks.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SYSTEM AND SOFTWARE ════════════════════════════════ -->
+<section>
+  <h2>System and software</h2>
+  <div class="cards">
+    <div class="card"><span class="k">Polkit</span><h4>Who may do what</h4>Rules in <code>rules.d</code> with user, group and <strong>variable conditions</strong>. The classic: non-IT users cannot mount removable drives; developers get it back via a higher-priority binding.</div>
+    <div class="card"><span class="k">firewalld</span><h4>Zones as policy</h4>Services, ports, rich rules and target per zone. Default-deny inbound, SSH only from the management subnet. The policy can start and enable firewalld if it is not running.</div>
+    <div class="card"><span class="k">Package</span><h4>Repositories and packages</h4>APT deb822, DNF/YUM and Zypper repos with GPG keys, written in the node's native format. Packages <em>present / absent / latest</em>, version pins, optional flag. Installs via PackageKit. <strong>One-click import</strong> of Ubuntu PPAs, Fedora COPR and openSUSE .ymp.</div>
+    <div class="card"><span class="k">Flatpak</span><h4>Remotes, apps and a catalogue</h4>Remotes with GPG key, subset (Flathub <em>verified</em>), allow and deny filters, priority. Apps <em>present / latest / absent</em> per remote and branch, periodic updates, runtime cleanup. Flathub indexed from AppStream; air-gapped servers upload the index by hand. Existing <code>flathub</code> remotes are adopted, not duplicated.</div>
+  </div>
+  <aside class="notes">
+    [18:15, ~1.5 мин] Четири типа, по една история всеки: USB устройствата (polkit), default-deny (firewalld), PPA с едно кликване (Package), Flathub каталог в редактора (Flatpak). Flatpak е особено добър за immutable дистрибуции.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SESSION ACCESS ════════════════════════════════ -->
+<section>
+  <h2>Session Access <em>(born from a Hacker News comment)</em></h2>
+  <div class="cols">
+    <div class="col">
+      <p class="small">"Could Bor enforce screen time on laptops given to children, better than iOS and Android do?" Three weeks later it shipped in v0.9.0.</p>
+      <ul class="tight">
+        <li><strong>Weekly schedules</strong> per user or group, in node-local time, windows that cross midnight</li>
+        <li><strong>Layer 1, logind</strong> (always on): warnings at 30, 15 and 5 minutes (the last one bypasses do-not-disturb), then <strong>lock</strong> or <strong>log off</strong>; a re-lock watchdog keeps the session closed</li>
+        <li><strong>Layer 2, pam_time</strong> (optional): blocks new logins outside the window, optionally for SSH too; keeps enforcing while the agent is down</li>
+        <li>Distro-aware PAM: <code>pam-auth-update</code> on Debian and Ubuntu; a documented one-time step on authselect systems</li>
+        <li>Guard rails: root is never restricted, atomic writes with self-check, fail-open removal on unbind</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <img class="shot" src="img/policy-session-access.png" alt="Session Access editor: rules per user or group with day-and-time windows" style="width:100%;">
+      <p class="tiny" style="margin-top:.4em;">Computer-lab hours, shared kiosks outside opening hours, contractors at end of shift.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    [19:45, ~1.5 мин] Истории, не функции. Show HN за v0.8.0 отиде на върха на първата страница; един коментар стана основната функция на v0.9.0. Двата слоя: logind заключва, pam_time не пуска нови входове и работи дори агентът да е спрян.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ DISK ENCRYPTION ════════════════════════════════ -->
+<section>
+  <h2>Disk encryption <em>(what AD does for BitLocker, for Linux)</em></h2>
+  <div class="cols">
+    <div class="col">
+      <ul class="tight">
+        <li><strong>Verifies</strong> that the volumes that should be LUKS2-encrypted actually are; unencrypted mounts are non-compliant</li>
+        <li><strong>Protectors, not passphrases</strong>: TPM 2.0 with explicit PCR profiles (Secure Boot by default), <strong>Tang</strong> servers with pinned thumbprints and a threshold, or both</li>
+        <li><strong>Recovery key per volume</strong>, escrowed envelope-encrypted on the server; reveal needs a dedicated permission, every reveal is audited, keys rotate after use</li>
+        <li><strong>Auto-reseal</strong>: a firmware update changes TPM measurements; the next boot falls back to Tang or the key, then the agent re-enrolls the TPM</li>
+        <li>Adoption paths: existing Clevis/Tang setups, a one-time bootstrap key from Kickstart or autoinstall, or <code>bor-agent luks adopt</code></li>
+        <li>Never encrypts a running disk in place; detects TPMs owned by other FDE stacks and reports them as externally managed</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <img class="shot" src="img/disk-encryption-fleet.png" alt="Disk Encryption fleet view: volumes, escrowed keys, rotations pending, protectors per node" style="width:100%;">
+      <p class="tiny" style="margin-top:.4em;">Fleet view: volumes, keys escrowed, rotations pending, unencrypted mounts, externally managed, clone suspects.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    [21:15, ~1.5 мин] За хората от публичния сектор: въпросът „кой отключва лаптопа след firmware ъпдейт в неделя“ е истински. Bor оркестрира стандартните инструменти (cryptsetup, systemd-cryptenroll, clevis) и добавя двете липсващи неща: escrow-нат, одитиран, ротиран recovery ключ и едно място, където се вижда всичко.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SOFTWARE UPDATES ════════════════════════════════ -->
+<section>
+  <h2>Software updates <em>(Bor owns the reboot)</em></h2>
+  <div class="cols">
+    <div class="col">
+      <ul class="tight">
+        <li>Drives the distribution's own engine: <code>dnf-automatic</code>, <code>unattended-upgrades</code>, Zypper, and <code>transactional-update</code> on MicroOS, Aeon, Kalpa and SLE Micro</li>
+        <li><strong>Mode and schedule</strong>: security-only or everything, nightly window, offline installs at reboot on Fedora</li>
+        <li><strong>The reboot</strong>: only inside the maintenance window, only when nobody is logged in, forced after N days with a warning to the user</li>
+        <li><strong>Holds</strong> for packages that must not move, every hold change audited</li>
+        <li><strong>Firmware</strong>: nodes with fwupd list pending firmware updates</li>
+        <li><strong>CVE export</strong> of pending updates from the node list or a node page; Updates column and filter in the fleet view</li>
+        <li>Node actions: <em>Check now</em> and <em>Apply now</em> from the console</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <div class="callout mint"><strong>Patch management story:</strong> security updates every night, the reboot an update needs happens between 03:00 and 05:00 when nobody is logged in, forced after a week with a warning.</div>
+      <div class="callout"><strong>Compliance items</strong> for the engine, the mode, the schedule, pending updates and the reboot state, each with its CIS control number where one applies.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [22:45, ~1 мин] Най-честият въпрос от администратори на лаптопи: кой рестартира машината. Отговор: Bor, в прозореца, когато никой не е влязъл, с предупреждение и твърд краен срок.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SYSTEMD, SELINUX, APPARMOR ════════════════════════════════ -->
+<section>
+  <h2>Services, timers and mandatory access control <em>(new in v0.10)</em></h2>
+  <div class="cards three">
+    <div class="card"><span class="k">Services &amp; timers</span><h4 class="ih"><span class="ticon big" style="--i:url(img/types/Systemd.svg)"></span>systemd</h4>
+      <ul class="tight"><li>Unit state: enabled, disabled, masked; unit names come from the inventory agents report</li><li>Timer schedules and <strong>scheduled tasks</strong>: a script or program deployed as a Bor-owned unit, under a SELinux or AppArmor profile if you want</li><li>Optional preset file; requires the separate <code>systemd:exec</code> permission</li></ul></div>
+    <div class="card"><span class="k">SELinux</span><h4 class="ih"><span class="ticon big" style="--i:url(img/types/ShieldAlt.svg)"></span>Fedora, RHEL, derivatives</h4>
+      <ul class="tight"><li>Enforcing mode, booleans, per-domain <strong>permissive exceptions</strong> (the misbehaving VPN client, not the whole system), custom modules</li><li>Editor shows the node's or the fleet's current booleans and domains; <code>setenforce 0</code> is reverted</li></ul></div>
+    <div class="card"><span class="k">AppArmor</span><h4 class="ih"><span class="ticon big" style="--i:url(img/types/Fingerprint.svg)"></span>Ubuntu, Debian, openSUSE</h4>
+      <ul class="tight"><li>Profile modes (enforce, complain, disable), the <strong>user namespace restriction</strong>, custom profiles such as the four-line stub that lets an in-house Electron app sandbox</li><li>Agents collect denials; the node page proposes AppArmor rules and SELinux modules from them</li></ul></div>
+  </div>
+  <p class="tiny" style="margin-top:.5em;">Compliance items for these types carry <strong>CIS benchmark control numbers</strong>, and policies need the <code>mac:author</code> / <code>mac:operate</code> permissions.</p>
+  <aside class="notes">
+    [23:45, ~1 мин] Три нови типа от v0.10.0 (2 ноември); v0.10.1 добави constrain в CIL модулите и собствена MCS категория за агента, с което политиката за самозащита на агента работи без ръчна намеса на машината. Планираните задачи са единственото място, където Bor изпълнява код на машината: затова са зад отделна permission и могат да вървят под MAC профил.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ TAMPER PROTECTION ════════════════════════════════ -->
+<section>
+  <h2>When somebody "fixes" the file by hand</h2>
+  <div class="flow">
+    <div class="step hot fragment"><span class="n">1</span><br>A user with <code>sudo</code> opens <code>policies.json</code> and changes the homepage</div>
+    <div class="arr fragment">&gt;</div>
+    <div class="step fragment"><span class="n">2</span><br><strong>inotify</strong> wakes the agent the moment the file is written</div>
+    <div class="arr fragment">&gt;</div>
+    <div class="step good fragment"><span class="n">3</span><br>The file is <strong>restored</strong> atomically (temp + rename) before Firefox reads it</div>
+    <div class="arr fragment">&gt;</div>
+    <div class="step fragment"><span class="n">4</span><br><strong>Tamper event</strong>: path, plus PID, command and user of the process holding the file</div>
+    <div class="arr fragment">&gt;</div>
+    <div class="step good fragment"><span class="n">5</span><br>Audit log on the server, desktop notification, node status updated</div>
+  </div>
+  <div class="cols" style="margin-top:.6em;">
+    <div class="col">
+      <ul class="tight fragment" style="font-size:.9em;">
+        <li>Every file-based type is watched: browser policies, Kconfig, dconf, polkit, repos, firewalld zones, <code>time.conf</code>, Flatpak remotes, systemd drop-ins and tasks</li>
+        <li>systemd, SELinux and AppArmor drift is caught through D-Bus signals and audit records and re-asserted the same way</li>
+      </ul>
+      <div class="callout amber fragment">
+        Honest part: local root can <strong>always</strong> stop the agent. That is true on every OS. The goal is visibility and accountability, not DRM, and the server sees when an agent stops checking in.
+      </div>
+    </div>
+    <div class="col narrow" style="text-align:center;">
+      <img class="shot fragment" src="img/desktop-notification.png" alt="Desktop notification: Desktop Policies Updated" style="width:85%;">
+    </div>
+  </div>
+  <aside class="notes">
+    [24:45, ~1.5 мин] Любимият момент в демото: редакция на файла на живо и връщането му за по-малко от секунда. Кажете честната част сами, преди някой от залата да я каже вместо вас.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ COMPLIANCE AND NODE INSIGHT ════════════════════════════════ -->
+<section>
+  <h2>Compliance as data, node by node</h2>
+  <div class="cols">
+    <div class="col">
+      <ul class="tight">
+        <li>Every policy item reports <span class="badge b-soft">Compliant</span><span class="badge b-amber">Non-compliant</span><span class="badge b-grey">Inapplicable</span><span class="badge b-grey">Error</span><span class="badge b-grey">Unknown</span></li>
+        <li><em>Inapplicable</em> is honest: a node without Flatpak is not "broken"</li>
+        <li>Compliance page: per node, per group and per policy, with server-side filters and sorting</li>
+        <li><strong>Node page</strong>: distribution, desktop environment, agent version, heartbeat; sections for mandatory access control, software updates and firmware, LUKS volumes</li>
+        <li>Items carry CIS control numbers where they apply</li>
+        <li>Fleet views: Updates column and filter, disk-encryption summary, CVE export</li>
+      </ul>
+      <div class="callout" style="font-size:.78em; margin-top:.4em;"><strong>Bor Enterprise</strong> adds point-in-time <strong>reports</strong>: snapshots with hashed evidence, daily trends, scheduled delivery, signed PDF/A documents, waivers and sign-off, ISO/IEC 27001 Annex A mapping.</div>
+    </div>
+    <div class="col narrow">
+      <img class="shot" src="img/nodes.png" alt="Nodes list with status, group, distribution, agent version" style="width:100%;">
+    </div>
+  </div>
+  <aside class="notes">
+    [26:15, ~1 мин] За одитора съответствието трябва да е данни с история, не grep по изхода на Ansible. Петте състояния са важни: „Inapplicable“ спестява фалшиви аларми.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ AUDIT AND OBSERVABILITY ════════════════════════════════ -->
+<section>
+  <h2>Audit and observability</h2>
+  <div class="cols">
+    <div class="col">
+      <h3 style="margin-top:0;">Audit log</h3>
+      <ul class="tight">
+        <li>Every event with actor, IP, timestamp, action and target: sign-ins and MFA, permission changes, policy edits and releases, enrollments, tamper events, holds, and <strong>denied</strong> requests</li>
+        <li>Export as CSV or JSON, hardened against spreadsheet formula injection</li>
+        <li>Syslog export to your SIEM as <strong>CEF</strong> or <strong>OCSF 1.3</strong> JSON</li>
+        <li>GDPR controls: IP anonymisation, retention period, self-service data export, nothing sensitive is ever logged</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="margin-top:0;">Metrics and users</h3>
+      <ul class="tight">
+        <li>Prometheus <code>/metrics</code> on its own port, loopback by default, optional bearer token and TLS</li>
+        <li>Grafana dashboard and alerting examples shipped with the docs</li>
+        <li>Agents report heartbeats; the dashboard shows online, offline and unknown nodes</li>
+        <li>Users get a <strong>desktop notification</strong> when policies change and when a session is about to lock</li>
+      </ul>
+      <div class="callout" style="margin-top:.6em; font-size:.8em;">Every authentication event, privilege change and policy modification is recorded with timestamp, actor, action and target, and can be exported in a structured format.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [27:15, ~45 сек] CEF и OCSF отварят вратата към Sentinel, Splunk, QRadar. Анонимизацията на IP и срокът на съхранение са там заради GDPR.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ IDENTITY AND ACCESS ════════════════════════════════ -->
+<section>
+  <h2>Identity and access control</h2>
+  <div class="cols">
+    <div class="col">
+      <h3 style="margin-top:0;">Who can sign in</h3>
+      <ul class="tight">
+        <li>Local users (PBKDF2-SHA256, 600 000 iterations), self-service password change</li>
+        <li><strong>LDAP</strong>: Active Directory, FreeIPA, OpenLDAP; group mapping</li>
+        <li><strong>MFA</strong>: TOTP with backup codes, <strong>WebAuthn / FIDO2</strong> keys; enforceable for everyone, enrollment can be forced at first login</li>
+        <li>Agents authenticate with certificates, or <strong>Kerberos</strong> on domain-joined machines</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="margin-top:0;">What they may do</h3>
+      <ul class="tight">
+        <li>Built-in roles (Super Admin, Org Admin, Policy Editor, ...) and custom roles with <strong>per-action permissions</strong>: <code>policy:release</code>, <code>systemd:exec</code>, <code>mac:author</code>, <code>report:view</code>, ...</li>
+        <li>Roles on users and on user groups; privilege-escalation guards: you cannot grant what you do not hold, not even through a group</li>
+        <li>Server-side guard against deleting, disabling or demoting the last Super Admin</li>
+        <li>Type-to-confirm on every destructive action; denied changes are audited</li>
+        <li><strong>Enterprise</strong>: SSO with OIDC and SAML 2.0, SCIM 2.0 provisioning, roles scoped to node groups (delegated administration)</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    [28:00, ~1 мин] Две колони: кой влиза и какво може. Акцент върху escalation guards и последния Super Admin: дребни неща, които се виждат при security review.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SECURITY AND PKI ════════════════════════════════ -->
+<section>
+  <h2>Security by default</h2>
+  <div class="cols">
+    <div class="col">
+      <h3 style="margin-top:0;">PKI and transport</h3>
+      <table style="font-size:.72em;">
+        <tr><th>Role</th><th>Algorithm</th><th>Lifetime</th></tr>
+        <tr><td>Internal CA</td><td>ECDSA P-384</td><td>10 years</td></tr>
+        <tr><td>Server certificate</td><td>ECDSA P-256, or ACME / Let's Encrypt</td><td>365 days</td></tr>
+        <tr><td>Agent client certificate</td><td>ECDSA P-256</td><td>90 days, auto-renewed</td></tr>
+      </table>
+      <ul class="tight" style="margin-top:.4em;">
+        <li>TLS 1.3 and mandatory mTLS on the agent port; AEAD cipher suites only</li>
+        <li>CA generated on first start; a <strong>PKCS#11</strong> build keeps its key in an HSM</li>
+        <li>Revocation checked on every RPC against the database, no stale CRLs</li>
+        <li>Crypto from a <strong>FIPS 140-3</strong> validated module (Go, CAVP A6650); BSI TR-02102 and SOG-IS algorithm choices</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <h3 style="margin-top:0;">Hardening</h3>
+      <ul class="tight" style="font-size:.92em;">
+        <li>Typed protobuf on the wire; paths and names sanitised; atomic file writes</li>
+        <li>SSRF-hardened import helpers with DNS pinning; downloads served from an <code>os.Root</code>-scoped tree</li>
+        <li>Rate-limited auth routes, CSRF tokens, size and keepalive limits on gRPC</li>
+        <li>Initial admin password written to a root-only file, never to the log</li>
+      </ul>
+      <div class="callout amber" style="margin-top:.4em; font-size:.74em;">No third-party audit yet. The code, the crypto and the list of known limitations are public: check us.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [29:00, ~1 мин] Внимание с думите: Bor ПОЛЗВА FIPS 140-3 валидиран модул; самият Bor не е сертифициран продукт. Честността за липсата на външен одит печели повече доверие в тази зала от всяко лого.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ INSTALL AND OPERATE ════════════════════════════════ -->
+<section>
+  <h2>Install and operate</h2>
+  <div class="cols">
+    <div class="col">
+      <h3 style="margin-top:0;">Server</h3>
+      <ul class="tight">
+        <li>One binary + PostgreSQL. No queues, no sidecars.</li>
+        <li><code>podman-compose up -d</code>, deb/rpm with a systemd unit, container image (UBI, non-root, read-only FS), Helm chart</li>
+        <li>TLS: built-in CA, your own certificate, or <strong>ACME</strong></li>
+        <li>Migrations run on start; backup = PostgreSQL + <code>/var/lib/bor/pki</code>; restart-safe state</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="margin-top:0;">Agent</h3>
+      <ul class="tight">
+        <li>Packages: <strong>deb, rpm, apk, Arch</strong>; x86_64, aarch64, ppc64le</li>
+        <li>Debian, Ubuntu, Fedora, RHEL, openSUSE, Alpine, Arch; immutable: Kinoite, Silverblue, MicroOS</li>
+        <li>The server hosts <strong>signed repositories</strong> for the agent: nodes need no internet</li>
+        <li><strong>Deploy agent wizard</strong>: one generated script trusts the CA, adds the repo, installs, enrolls and starts</li>
+      </ul>
+    </div>
+  </div>
+  <pre class="compact"><code class="language-yaml" data-trim># /etc/bor/config.yaml on the node
+server:
+  address: "bor.example.org:8443"
+# then:  bor-agent --token &lt;ONE-TIME TOKEN&gt;  &amp;&amp;  systemctl enable --now bor-agent</code></pre>
+  <aside class="notes">
+    [30:00, ~45 сек] От нула до първа регистрирана машина за минути. Air-gapped работи, защото сървърът сам раздава пакетите и каталозите.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ POLICIES AS CODE ════════════════════════════════ -->
+<section>
+  <h2>Policies as code</h2>
+  <div class="cols">
+    <div class="col wide">
+<pre class="compact"><code class="language-yaml" data-trim>apiVersion: bor.dev/v1
+kind: Policy
+metadata:
+  name: firefox-corporate-baseline
+  displayName: Firefox - Corporate Baseline
+spec:
+  type: Firefox
+  content:
+    DisablePocket: true
+    Homepage:
+      Locked: true
+      StartPage: homepage
+      URL: https://intranet.example.com
+---
+apiVersion: bor.dev/v1
+kind: PolicyBinding
+metadata:
+  name: firefox-corporate-baseline-finance
+spec:
+  policy: firefox-corporate-baseline
+  group: Finance Desktops
+  priority: 10</code></pre>
+    </div>
+    <div class="col">
+      <ul class="tight">
+        <li>Export and import <strong>YAML or JSON</strong> bundles of policies and bindings</li>
+        <li>The same protobuf model for server, agent, console and file: no "almost the same" schema</li>
+        <li>Strict validation at the import boundary, <strong>preview before writing</strong>, skip-existing mode</li>
+        <li>Everything the console does goes through the REST API</li>
+        <li>Staging to production, backups, shared baselines, evidence for auditors</li>
+        <li class="plan">Git sync and signed bundles: on the roadmap</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    [30:45, ~45 сек] За DevOps хората в залата: пакетите са YAML с Kubernetes-подобен плик. Избрахме YAML пред Rego/OPA нарочно: политиката е желано състояние, не логика.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ SECTION 3 ════════════════════════════════ -->
+<section class="slide-section" data-background-color="#1b4332">
+  <div class="num">Chapter 03</div>
+  <h1>The project</h1>
+  <p>Licence, what comes next, and a demo.</p>
+</section>
+
+<!-- ════════════════════════════════ EDITIONS AND LICENCE ════════════════════════════════ -->
+<section>
+  <h2>Editions and licence</h2>
+  <div class="cols">
+    <div class="col">
+      <ul class="tight">
+        <li>From v0.10.0: <strong>AGPL-3.0</strong> (previously LGPL). Improvements come back even when Bor is offered as a service.</li>
+        <li><strong>CLA</strong> modelled on Apache's: you keep your copyright; it is written in that your contribution stays open source.</li>
+        <li>The Grafana and Mattermost model: the community edition for everyone, <strong>Bor Enterprise</strong> for large organisations funds the development of both.</li>
+      </ul>
+      <div class="callout mint" style="margin-top:.5em; font-size:.8em;">
+        <strong>Promises:</strong> the community edition stays free forever, no node limits, no keys · what is open stays open · security fixes always land in community · development happens in the open.
+      </div>
+    </div>
+    <div class="col narrow">
+      <table style="font-size:.7em;">
+        <tr><th>Community</th><th>Enterprise</th></tr>
+        <tr><td>All 16 policy types</td><td>SSO: OIDC and SAML 2.0</td></tr>
+        <tr><td>PKI, HSM, Kerberos, LDAP / AD</td><td>SCIM 2.0 provisioning</td></tr>
+        <tr><td>MFA, RBAC, audit, metrics</td><td>Node-group-scoped roles</td></tr>
+        <tr><td>LUKS recovery-key escrow</td><td>Compliance reports with history and signed PDFs</td></tr>
+        <tr><td>Export / import, deploy wizard</td><td>Support from the people who build it</td></tr>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">
+    [32:00, ~1 мин] Тук OpenFest публиката е най-критична. Кажете го направо: да, open core. Всичко, което трябва, за да управляваш флийт, е отворено. Enterprise са нещата, за които големите организации и без това плащат: SSO, SCIM, отчети, поддръжка.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ ROADMAP ════════════════════════════════ -->
+<section>
+  <h2>What comes next <em>(and where help is welcome)</em></h2>
+  <div class="cols">
+    <div class="col">
+      <h3 style="margin-top:0;">v0.10.0 and v0.10.1, released this week</h3>
+      <ul class="tight">
+        <li class="done">Five new types: Services &amp; timers, SELinux, AppArmor, Software updates, Disk encryption</li>
+        <li class="done">Restart-safe server state, editions and extension points</li>
+        <li class="done">v0.10.1: disk encryption on a default Fedora install, policy stream survives a suspend, signed checksums</li>
+      </ul>
+      <h3>After that</h3>
+      <ul class="tight">
+        <li class="plan">Agent auto-update</li>
+        <li class="plan">Git sync for policies, signed bundles</li>
+        <li class="plan">Console translations, Bulgarian first</li>
+        <li class="plan">End-to-end tests in CI, more than one active server replica</li>
+        <li class="plan">Policies for many more desktop applications</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3 style="margin-top:0;">Candidate policy types. Which one first?</h3>
+      <ul class="tight">
+        <li class="ask">CA trust store and machine certificates</li>
+        <li class="ask">NetworkManager: Wi-Fi and VPN profiles</li>
+        <li class="ask">CUPS printers</li>
+        <li class="ask">sudoers · SSH client and server</li>
+        <li class="ask">USBGuard · auditd rules</li>
+        <li class="ask">LibreOffice</li>
+      </ul>
+      <div class="callout fragment" style="margin-top:.5em;">Which one first? Tell us at the stand: the most requested type goes into the v0.11 plan. Proposals and pull requests are welcome for everything on this slide.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [33:00, ~1 мин] Вторият интерактивен момент: попитайте залата кой тип им трябва първи и поканете хората да кажат на щанда. Най-добрата обратна връзка идва от хора, които управляват реални машини. Ако попитат за sudo: run0 (systemd 256+) се оторизира през polkit действието org.freedesktop.systemd1.manage-units, така че Polkit типът вече го покрива, но е „всичко или нищо“ (root без ограничение по команда). sudoers остава за списъци по команди, за логове и за дистрибуциите без run0 (RHEL 9, Ubuntu 24.04). Затова sudoers е кандидат.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ DEMO ════════════════════════════════ -->
+<section>
+  <h2>Demo: from the console to the desktop in seconds</h2>
+  <ol style="font-size:1.02em;">
+    <li>The console: fleet, groups, bindings with priorities.</li>
+    <li>A new <strong>Firefox</strong> policy: homepage, locked. Draft, release, bind to the group.</li>
+    <li>The laptop gets it within seconds: desktop notification, Firefox shows it.</li>
+    <li><strong>Tampering</strong>: edit <code>policies.json</code> by hand. It comes back at once; the tamper event is in the audit log.</li>
+    <li>Compliance and audit: what the administrator sees. Time permitting: <code>setenforce 0</code> reverted, Session Access, or a package install.</li>
+  </ol>
+  <div class="callout mint" style="margin-top:.8em;">Remember the hand you raised? This is the same task you were doing over SSH.</div>
+  <aside class="notes">
+    [34:00, ~10 мин демо] Преди доклада: VM с GNOME или KDE, вече регистрирана; сървърът локално (не разчитайте на Wi-Fi); токен генериран предварително; терминал с голям шрифт. Резервен вариант: записано видео на същите стъпки + екранни снимки. НЕ демонстрирайте KDE wallpaperImage (счупено). Firefox на VM да е затворен преди стъпка 3, за да се види ефектът при стартиране.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ GET INVOLVED ════════════════════════════════ -->
+<section class="slide-cta" data-background-image="img/bg1.png" data-background-size="100% 100%" data-background-opacity="1">
+  <div class="inner">
+    <h2>Get involved</h2>
+    <a class="cta-link" href="https://getbor.dev">getbor.dev</a>
+    <a class="cta-link" href="https://github.com/VuteTech/Bor">github.com/VuteTech/Bor</a>
+    <a class="cta-link" href="https://demo.getbor.dev">demo.getbor.dev &nbsp;<span style="font-weight:400; color:var(--g-mid);">· demo / demodemodemo</span></a>
+    <a class="cta-link" href="https://getbor.dev/publications/openfest2026">getbor.dev/publications/openfest2026 &nbsp;<span style="font-weight:400; color:var(--g-mid);">· these slides</span></a>
+    <div class="cta-boxes">
+      <div class="cta-box"><strong>The Bor stand</strong>Both days. Bor running live: release a policy and watch it land on a desktop.</div>
+      <div class="cta-box"><strong>We are looking for</strong>Pilot organisations: schools, municipalities, companies, hackerspaces. Distro testers. Translators.</div>
+      <div class="cta-box"><strong>Contribute</strong>Issues, pull requests, new policy types, documentation. A star on GitHub helps too.</div>
+    </div>
+    <p style="margin-top:1em; font-size:.66em; color:var(--g-mid);">
+      <img src="img/vute.svg" alt="Vute.Tech" class="vute-inline" style="height:1.9em; vertical-align:middle; margin-right:.6em;">
+      AGPL-3.0 &nbsp;·&nbsp; © 2026 Vute Tech LTD and contributors &nbsp;·&nbsp; blago.petrov@vute.tech &nbsp;·&nbsp; bor@vute.tech
+    </p>
+  </div>
+  <aside class="notes">
+    [44:00, ~30 сек] Поканата на щанда е най-важното изречение. После: въпроси.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════ QUESTIONS ════════════════════════════════ -->
+<section class="slide-title centered" data-background-image="img/bg1.png" data-background-size="100% 100%" data-background-opacity="0.18">
+  <div class="inner">
+    <h1 style="font-size:3em;">Questions?</h1>
+    <p class="subtitle" style="margin-top:.4em;">Blagovest Petrov &nbsp;·&nbsp; Founder, Vute.Tech &nbsp;·&nbsp; blago.petrov@vute.tech &nbsp;·&nbsp; getbor.dev</p>
+    <p class="small">Take the demo policies home: <a href="https://dev.vute.tech/Conferences/OpenFest2026-Bor-Policies">dev.vute.tech/Conferences/OpenFest2026-Bor-Policies</a></p>
+    <p class="small">War stories about managing Linux machines are welcome too.</p>
+  </div>
+  <aside class="notes">
+    [44:30] Въпроси до края на слота. Ако няма: „елате на щанда“. Политиките от демото са на dev.vute.tech/Conferences/OpenFest2026-Bor-Policies.
+  </aside>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<script src="vendor/reveal.js/dist/reveal.js"></script>
+<script src="vendor/reveal.js/plugin/highlight/highlight.js"></script>
+<script src="vendor/reveal.js/plugin/notes/notes.js"></script>
+<script src="vendor/reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+  // ?allfragments reveals every fragment at once (used for layout checks and static renders).
+  if (/allfragments/.test(window.location.search)) {
+    document.querySelectorAll('.fragment').forEach(function (f) { f.classList.remove('fragment'); });
+  }
+  // Every content slide gets the faint brand background unless it sets its own.
+  document.querySelectorAll('.reveal .slides > section').forEach(function (s) {
+    if (!s.hasAttribute('data-background-image') && !s.hasAttribute('data-background-color')) {
+      s.setAttribute('data-background-image', 'img/bg1.png');
+      s.setAttribute('data-background-size', '100% 100%');
+      s.setAttribute('data-background-opacity', '0.12');
+    }
+  });
+
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.05,
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    pdfSeparateFragments: false,
+    highlight: { highlightOnLoad: true },
+    plugins: [ RevealHighlight, RevealNotes, RevealZoom ],
+  });
+</script>
+</body>
+</html>
