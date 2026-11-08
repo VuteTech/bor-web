@@ -1,6 +1,5 @@
 {{- /* One event from data/events.yaml, used by layouts/_default/talks.html.
-     Slides, PDF and recording are offered only once the event has ended. */ -}}
-{{- $ended := lt .end (now.Format "2006-01-02") }}
+     Slides, PDF and recording are shown as soon as they are set. */ -}}
 <div class="card event-card mb-5">
   <div class="card-content">
     <p class="dl-pkg-name">{{ .event }} <span class="tag is-light">{{ .format }}</span></p>
@@ -13,11 +12,9 @@
     </p>
     {{- end }}
     <div class="buttons mt-4">
-      {{- if $ended }}
       {{- with .slides }}<a href="{{ . }}" class="button is-small is-outlined is-dark">Slides</a>{{ end }}
       {{- with .pdf }}<a href="{{ . }}" class="button is-small is-outlined is-dark">PDF</a>{{ end }}
       {{- with .video }}<a href="{{ . }}" class="button is-small is-outlined is-dark">Recording</a>{{ end }}
-      {{- end }}
       {{- with .talk }}{{ with .url }}<a href="{{ . }}" class="button is-small is-text">Talk in the programme</a>{{ end }}{{ end }}
       {{- with .url }}<a href="{{ . }}" class="button is-small is-text">Event website</a>{{ end }}
       {{- with .post }}<a href="{{ . }}" class="button is-small is-text">Blog post</a>{{ end }}

@@ -1,6 +1,6 @@
 # Talks and events shown on /talks/. Dates are ISO strings; an event is
 # "upcoming" until its end date has passed. Slides, pdf and video are shown
-# only after the event; leave video empty until a recording exists.
+# as soon as they are set; leave them empty until they are published.
 - id: cfgmgmtcamp2027
   event: CfgMgmtCamp 2027
   start: "2027-02-01"
@@ -52,4 +52,4 @@
     title: Bor, policy management for Linux workstations
   slides: /publications/tuxcon2026/
   pdf: /publications/tuxcon2026/bor-tuxcon2026.pdf
-  video: ""
+  video: https://www.youtube.com/watch?v=xy_48SWnaJk
