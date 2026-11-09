@@ -1,6 +1,18 @@
 # Talks and events shown on /talks/. Dates are ISO strings; an event is
 # "upcoming" until its end date has passed. Slides, pdf and video are shown
 # as soon as they are set; leave them empty until they are published.
+- id: fosdem2027
+  event: FOSDEM 2027
+  start: "2027-01-31"
+  end: "2027-01-31"
+  when: "Sunday 31 January 2027"
+  city: Brussels, Belgium
+  venue: ULB Solbosch Campus
+  url: https://fosdem.org/2027/
+  format: Stand
+  summary: A stand shared with Kiwi TCMS, the open source test management system, at Europe's largest free and open source software conference. The building and the exact spot follow when FOSDEM assigns them.
+  post: /blog/2026-11-09-bor-and-kiwi-tcms-at-fosdem-2027/
+
 - id: cfgmgmtcamp2027
   event: CfgMgmtCamp 2027
   start: "2027-02-01"
