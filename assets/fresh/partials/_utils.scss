@@ -578,3 +578,33 @@ Event banner above the homepage navbar (partials/event-banner.html)
         padding: 1.25rem;
     }
 }
+
+/* Row of equal, square logos at the top of an event post */
+.event-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 2rem;
+    max-width: 660px;
+
+    a {
+        flex: 1 1 0;
+        padding: 0 1.25rem;
+
+        & + a {
+            border-left: 1px solid $fade-grey;
+        }
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: 480px) {
+        a {
+            padding: 0 0.6rem;
+        }
+    }
+}

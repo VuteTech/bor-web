@@ -56,10 +56,10 @@ params:
   githubFollow: https://github.com/VuteTech/bor
   # Announcement strip above the homepage navbar; disappears after "until".
   eventbanner:
-    text: "Meet Bor at OpenFest in Sofia on 7 and 8 November: a stand both days, and a talk on Saturday at 12:15 in hall Varna."
+    text: "Meet Bor in Belgium: a stand shared with Kiwi TCMS at FOSDEM in Brussels on Sunday 31 January, and a talk at CfgMgmtCamp in Ghent, 1 to 3 February."
     link: /talks/
     linktext: Talks and events
-    until: "2026-11-08"
+    until: "2027-02-03"
   # Contact route shown on /enterprise/.
   enterprise:
     email: office@vute.tech
