@@ -7,11 +7,17 @@ tags: ["event", "fosdem", "kiwi-tcms", "stand", "community"]
 heropill: false
 ---
 
-<p class="has-text-centered">
-  <a href="https://kiwitcms.org/" title="Kiwi TCMS, the open source test management system">
-    <img src="/images/events/kiwitcms.svg" alt="Kiwi TCMS" width="420" height="52">
+<div class="event-logos">
+  <a href="/" title="Bor, policy management for Linux desktops">
+    <img src="/images/logos/bor-square.svg" alt="Bor" width="200" height="200">
   </a>
-</p>
+  <a href="https://kiwitcms.org/" title="Kiwi TCMS, the open source test management system">
+    <img src="/images/events/kiwitcms-square.svg" alt="Kiwi TCMS" width="200" height="200">
+  </a>
+  <a href="https://fosdem.org/2027/" title="FOSDEM 2027, Brussels">
+    <img src="/images/events/fosdem2027.svg" alt="FOSDEM 2027" width="200" height="200">
+  </a>
+</div>
 
 Bor is going to [FOSDEM 2027](https://fosdem.org/2027/) in Brussels, and we are not going alone: we will share a stand with our friends from [Kiwi TCMS](https://kiwitcms.org/). FOSDEM has published its [list of accepted stands](https://fosdem.org/2027/news/accepted-stands/), and "Bor & Kiwi TCMS" is on it, for **Sunday, 31 January 2027**.
 
@@ -27,15 +33,7 @@ Kiwi TCMS is the leading open source test management system. It keeps test plans
 
 What we like most is how the project is run. Kiwi TCMS has been open source for many years, it is developed in the open with a steady rhythm of releases, and the team behind it is a regular face at open source conferences around Europe. Like Bor, it is made in Europe, with roots in Bulgaria. It is the kind of project we are glad to stand next to.
 
-## How Bor uses Kiwi TCMS
-
-This is not only a shared table. We are moving the whole QA cycle of a Bor release into Kiwi TCMS.
-
-A policy management system has to be tested on real desktops. A setting has to arrive on Fedora and on Debian, in KDE Plasma and in GNOME, hold when a user tries to change it, and go away cleanly when the policy is unbound. Some of that is automated, and a lot of it still means a person sitting in front of a machine and checking. With every new policy type the list gets longer, and a checklist in a text file no longer does the job.
-
-The goal is one test plan per release: the cases for every policy type on every supported distribution, the manual runs and the automated results side by side, and a clear answer to "is this release ready?" before a tag is pushed. This is work in progress. The test cases are still being written and the release process is still being wired into it. We will write about the setup in detail once a full release has gone through it.
-
-So the stand has a practical side as well: on one half you can see what Bor does on a Linux desktop, and on the other the tool we use to make sure it keeps doing it.
+The Kiwi TCMS team is busy on Saturday as well: they are again co-hosting the [Testing and Continuous Delivery devroom](https://fosdem-testingautomation.github.io/). Their side of the story is in the [Kiwi TCMS announcement](https://kiwitcms.org/blog/kiwi-tcms-team/2026/11/10/bor-kiwi-tcms-are-going-to-fosdem-2027/).
 
 ## Where to find us
 
